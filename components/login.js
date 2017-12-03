@@ -21,6 +21,8 @@ import {
   Text
 } from "native-base";
 
+import { GoogleSignin } from "react-native-google-signin";
+
 export default class Login extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +41,7 @@ export default class Login extends Component {
               "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Virginia_Cavaliers_text_logo.svg/1200px-Virginia_Cavaliers_text_logo.svg.png"
           }}
         />
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={{
             backgroundColor: "#000080",
             padding: 20,
@@ -58,7 +60,14 @@ export default class Login extends Component {
             {" "}
             Login
           </Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+
+        <GoogleSigninButton
+          style={{ width: 48, height: 48 }}
+          size={GoogleSigninButton.Size.Icon}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={this.logIn()}
+        />
         <Text
           style={{
             color: "#e65c00",
