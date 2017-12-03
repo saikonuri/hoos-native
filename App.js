@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import Login from "./components/login.js";
 import Home from "./components/home.js";
 import * as firebase from "firebase";
-import { GoogleSignin } from "react-native-google-signin";
+import Expo from "expo";
 
 var config = {
   apiKey: "AIzaSyBn91DlEuk_grmuj9BC30PTNCRKEV92zWo",
@@ -14,27 +14,43 @@ var config = {
   messagingSenderId: "468327093282"
 };
 
-var provider = new firebase.auth.GoogleAuthProvider();
+firebase.initializeApp(config);
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      loggedIn: false
+      loggedIn: false,
+      user: null
     };
   }
-  logIn() {
-    this.setState({
-      loggedIn: true
-    });
+
+  async logIn() {
+    const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
+      "132357100763432",
+      { permissions: ["public_profile"] }
+    );
+
+    if (type === "success") {
+      // Build Firebase credential with the Facebook access token.
+      const credential = firebase.auth.FacebookAuthProvider.credential(token);
+      // Sign in with credential from the Facebook user.
+      firebase
+        .auth()
+        .signInWithCredential(credential)
+        .then(user => {
+          this.setState({
+            loggedIn: true,
+            user: user
+          });
+        })
+        .catch(error => {});
+    }
   }
 
-  componentWillMount() {
-    firebase.initializeApp(config);
-  }
   render() {
     if (this.state.loggedIn) {
-      return <Home />;
+      return <Home user={this.state.user} />;
     } else {
       return (
         <Login

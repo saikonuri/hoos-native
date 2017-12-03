@@ -14,6 +14,9 @@ import {
   Text
 } from "native-base";
 export default class Home extends Component {
+  componentWillMount() {
+    console.log(this.props.user.displayName);
+  }
   render() {
     return (
       <Container>
@@ -24,7 +27,7 @@ export default class Home extends Component {
             </Button>
           </Left>
           <Body>
-            <Title>Welcome!</Title>
+            <Title>{this.props.user.displayName}</Title>
           </Body>
           <Right />
         </Header>
