@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
   Container,
-  Header,
   Title,
   Content,
   Footer,
@@ -13,28 +12,50 @@ import {
   Icon,
   Text
 } from "native-base";
+import { StyleSheet, View, AsyncStorage } from "react-native";
+import { Header, Avatar } from "react-native-elements";
+import { MapView } from "expo";
+
 export default class Home extends Component {
   componentWillMount() {
-    console.log(this.props.user.displayName);
+    console.log(this.props.user);
   }
   render() {
     return (
-      <Container>
-        <Header>
-          <Left>
-            <Button transparent>
-              <Icon name="menu" />
-            </Button>
-          </Left>
-          <Body>
-            <Title>{this.props.user.displayName}</Title>
-          </Body>
-          <Right />
-        </Header>
-        <Content>
-          <Text>Home Page</Text>
-        </Content>
-      </Container>
+      <View style={styles.map}>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: 38.0293,
+            longitude: -78.4767,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421
+          }}
+        />
+        <View>
+          <Header
+            leftComponent={{ icon: "menu", color: "#fff" }}
+            centerComponent={{
+              text: this.props.user.displayName,
+              style: { color: "#fff" }
+            }}
+            rightComponent={
+              <Avatar
+                small
+                source={{
+                  uri: this.props.user.photoURL
+                }}
+              />
+            }
+          />
+        </View>
+      </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  map: {
+    ...StyleSheet.absoluteFillObject
+  }
+});

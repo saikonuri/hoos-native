@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import Login from "./components/login.js";
 import Home from "./components/home.js";
 import * as firebase from "firebase";
@@ -25,6 +25,21 @@ export default class App extends React.Component {
     };
   }
 
+  componentWillMount() {
+    this.updateLogin();
+  }
+
+  updateLogin() {
+    AsyncStorage.getItem("user").then(res => {
+      if (res !== null) {
+        this.setState({
+          loggedIn: true,
+          user: JSON.parse(res)
+        });
+      }
+    });
+  }
+
   async logIn() {
     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
       "132357100763432",
@@ -35,14 +50,13 @@ export default class App extends React.Component {
       // Build Firebase credential with the Facebook access token.
       const credential = firebase.auth.FacebookAuthProvider.credential(token);
       // Sign in with credential from the Facebook user.
+      var that = this;
       firebase
         .auth()
         .signInWithCredential(credential)
         .then(user => {
-          this.setState({
-            loggedIn: true,
-            user: user
-          });
+          AsyncStorage.setItem("user", JSON.stringify(user));
+          that.updateLogin();
         })
         .catch(error => {});
     }
