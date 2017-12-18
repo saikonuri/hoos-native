@@ -5,24 +5,38 @@ import {
   Content,
   Footer,
   FooterTab,
-  Button,
   Left,
   Right,
   Body,
-  Icon,
-  Text
+  Icon
 } from "native-base";
-import { StyleSheet, View, AsyncStorage } from "react-native";
-import { Header, Avatar } from "react-native-elements";
+import { StyleSheet, View, AsyncStorage, Text } from "react-native";
+import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
+import { Font } from "expo";
 
 export default class Home extends Component {
-  componentWillMount() {
-    console.log(this.props.user);
+  constructor(props) {
+    super(props);
+    this.state = {
+      fontLoaded: false
+    };
+  }
+  async componentWillMount() {
+    await Font.loadAsync({
+      bungee: require("../assets/fonts/Bungee-Regular.ttf")
+    });
+    this.setState({
+      fontLoaded: true
+    });
+  }
+
+  logOut() {
+    this.props.logOut();
   }
   render() {
     return (
-      <View style={styles.map}>
+      <View style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={{
@@ -32,22 +46,30 @@ export default class Home extends Component {
             longitudeDelta: 0.0421
           }}
         />
-        <View>
-          <Header
-            leftComponent={{ icon: "menu", color: "#fff" }}
-            centerComponent={{
-              text: this.props.user.displayName,
-              style: { color: "#fff" }
-            }}
-            rightComponent={
-              <Avatar
-                small
-                source={{
-                  uri: this.props.user.photoURL
-                }}
-              />
-            }
-          />
+        <View style={{ height: 50 }}>
+          <View style={styles.header}>
+            <Avatar
+              medium
+              rounded
+              source={{
+                uri: this.props.user.photoURL
+              }}
+            />
+            <View>
+              {this.state.fontLoaded ? (
+                <Text style={styles.name}>{this.props.user.displayName}</Text>
+              ) : (
+                <Text>"Welcome"</Text>
+              )}
+            </View>
+            <Button
+              small
+              borderRadius={30}
+              title="Log Out"
+              backgroundColor="black"
+              onPress={() => this.logOut()}
+            />
+          </View>
         </View>
       </View>
     );
@@ -55,7 +77,53 @@ export default class Home extends Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject
+  },
   map: {
     ...StyleSheet.absoluteFillObject
+  },
+  header: {
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: "7%"
+  },
+  name: {
+    backgroundColor: "transparent",
+    fontFamily: "bungee",
+    fontSize: 20,
+    marginTop: "10%"
   }
 });
+
+{
+  /* <View style={styles.header}>
+          <Avatar
+            medium
+            rounded
+            source={{
+              uri: this.props.user.photoURL
+            }}
+          />
+          <View>
+            {this.state.fontLoaded ? (
+              <Text style={styles.name}>{this.props.user.displayName}</Text>
+            ) : (
+              <Text>"Welcome"</Text>
+            )}
+          </View> 
+          <Button small borderRadius={30} title="Log Out" />
+        </View>
+        <View>
+          <MapView
+            style={styles.map}
+            initialRegion={{
+              latitude: 38.0293,
+              longitude: -78.4767,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421
+            }}
+          />
+        </View> */
+}

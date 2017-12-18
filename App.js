@@ -31,12 +31,20 @@ export default class App extends React.Component {
 
   updateLogin() {
     AsyncStorage.getItem("user").then(res => {
-      if (res !== null) {
+      console.log(res);
+      if (res !== null && res !== "{}") {
         this.setState({
           loggedIn: true,
           user: JSON.parse(res)
         });
       }
+    });
+  }
+
+  logOut() {
+    AsyncStorage.setItem("user", "");
+    this.setState({
+      loggedIn: false
     });
   }
 
@@ -64,7 +72,7 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.loggedIn) {
-      return <Home user={this.state.user} />;
+      return <Home user={this.state.user} logOut={() => this.logOut()} />;
     } else {
       return (
         <Login
