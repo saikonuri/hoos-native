@@ -15,6 +15,7 @@ var config = {
 };
 
 firebase.initializeApp(config);
+var provider = new firebase.auth.GoogleAuthProvider();
 
 export default class App extends React.Component {
   constructor(props) {
@@ -31,7 +32,6 @@ export default class App extends React.Component {
 
   updateLogin() {
     AsyncStorage.getItem("user").then(res => {
-      console.log(res);
       if (res !== null && res !== "{}") {
         this.setState({
           loggedIn: true,
@@ -39,6 +39,36 @@ export default class App extends React.Component {
         });
       }
     });
+  }
+  async signInWithGoogleAsync() {
+    try {
+      const result = await Expo.Google.logInAsync({
+        iosClientId: "468327093282-o2ncjg0chilf0bujmnsiqoslj2nq9hm3.apps.googleusercontent.com",
+        scopes: ['profile', 'email'],
+      });
+
+      if (result.type === 'success') {
+        var that = this;
+        var credential = firebase.auth.GoogleAuthProvider.credential(result.idToken, result.accessToken);
+        firebase.auth().signInWithCredential(credential).then(user => {
+          AsyncStorage.setItem("user", JSON.stringify(user));
+          that.updateLogin();
+        }).catch(error => {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          // ...
+        });
+      } else {
+        return { cancelled: true };
+      }
+    } catch (e) {
+      return { error: true };
+    }
   }
 
   logOut() {
@@ -66,9 +96,11 @@ export default class App extends React.Component {
           AsyncStorage.setItem("user", JSON.stringify(user));
           that.updateLogin();
         })
-        .catch(error => {});
+        .catch(error => { });
     }
   }
+
+
 
   render() {
     if (this.state.loggedIn) {
@@ -76,7 +108,10 @@ export default class App extends React.Component {
     } else {
       return (
         <Login
-          logIn={() => {
+          googleLogIn={() => {
+            this.signInWithGoogleAsync();
+          }}
+          facebookLogIn={() => {
             this.logIn();
           }}
         />

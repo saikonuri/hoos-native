@@ -3,9 +3,10 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
-  Button,
   Image
 } from "react-native";
+
+import { Avatar, Button, SocialIcon } from "react-native-elements";
 
 import {
   Container,
@@ -26,8 +27,12 @@ export default class Login extends Component {
     super(props);
   }
 
-  logIn() {
-    this.props.logIn();
+  googleLogIn() {
+    this.props.googleLogIn();
+  }
+
+  facebookLogIn() {
+    this.props.facebookLogIn();
   }
   render() {
     return (
@@ -39,26 +44,20 @@ export default class Login extends Component {
               "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Virginia_Cavaliers_text_logo.svg/1200px-Virginia_Cavaliers_text_logo.svg.png"
           }}
         />
-        <TouchableOpacity
-          style={{
-            backgroundColor: "#000080",
-            padding: 20,
-            borderRadius: 50
-          }}
-          onPress={() => {
-            this.logIn();
-          }}
-        >
-          <Text
-            style={{
-              color: "white",
-              fontSize: 20
-            }}
-          >
-            {" "}
-            Login
-          </Text>
-        </TouchableOpacity>
+        <Button
+          small
+          borderRadius={30}
+          title="UVA Sign-In"
+          backgroundColor="#f65314"
+          onPress={() => this.googleLogIn()}
+        />
+        <Button
+          small
+          borderRadius={30}
+          title="Facebook Sign In"
+          backgroundColor="#3b5998"
+          onPress={() => this.facebookLogIn()}
+        />
         <Text
           style={{
             color: "#e65c00",
