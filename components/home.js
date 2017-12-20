@@ -14,6 +14,8 @@ import { StyleSheet, View, AsyncStorage, Text } from "react-native";
 import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
+import axios from "axios";
+const url = "http://192.168.1.13:4000/";
 
 export default class Home extends Component {
   constructor(props) {
@@ -34,6 +36,15 @@ export default class Home extends Component {
   logOut() {
     this.props.logOut();
   }
+
+  test() {
+    axios.get(url).then(res => {
+      console.log(res.data.data);
+    }).catch(error => {
+      console.log(error);
+    });
+  }
+
   render() {
     return (
       <View style={styles.container}>
@@ -54,13 +65,14 @@ export default class Home extends Component {
               source={{
                 uri: this.props.user.photoURL
               }}
+              onPress={this.test()}
             />
             <View>
               {this.state.fontLoaded ? (
                 <Text style={styles.name}>{this.props.user.displayName}</Text>
               ) : (
-                <Text>"Welcome"</Text>
-              )}
+                  <Text>"Welcome"</Text>
+                )}
             </View>
             <Button
               small

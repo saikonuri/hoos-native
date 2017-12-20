@@ -38,11 +38,8 @@ export default class Login extends Component {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
         <Image
-          style={{ width: 120, height: 120, marginBottom: "5%" }}
-          source={{
-            uri:
-              "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8c/Virginia_Cavaliers_text_logo.svg/1200px-Virginia_Cavaliers_text_logo.svg.png"
-          }}
+          style={{ width: 325, height: 325, marginBottom: "5%" }}
+          source={require("../assets/hoosLogo.png")}
         />
         <Button
           small
@@ -57,16 +54,8 @@ export default class Login extends Component {
           title="Facebook Sign In"
           backgroundColor="#3b5998"
           onPress={() => this.facebookLogIn()}
+          style={{ marginTop: "2%" }}
         />
-        <Text
-          style={{
-            color: "#e65c00",
-            fontSize: 40,
-            marginTop: "10%"
-          }}
-        >
-          Hoos Active
-        </Text>
       </View>
     );
   }

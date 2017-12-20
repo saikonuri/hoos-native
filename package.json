@@ -19,7 +19,9 @@
     "preset": "jest-expo"
   },
   "dependencies": {
+    "axios": "^0.17.1",
     "expo": "^23.0.4",
+    "express": "^4.16.2",
     "firebase": "^4.7.0",
     "native-base": "^2.3.3",
     "react": "16.0.0",
