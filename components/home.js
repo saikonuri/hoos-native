@@ -15,7 +15,7 @@ import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
 import axios from "axios";
-const url = "http://192.168.1.13:4000/";
+const url = "https://shrouded-forest-95429.herokuapp.com";
 
 export default class Home extends Component {
   constructor(props) {
@@ -37,6 +37,13 @@ export default class Home extends Component {
     this.props.logOut();
   }
 
+  test() {
+    axios.get(url).then(res => {
+      console.log("Heroku Responded!")
+    }).catch(err => {
+
+    })
+  }
 
   render() {
     return (
@@ -58,6 +65,7 @@ export default class Home extends Component {
               source={{
                 uri: this.props.user.photoURL
               }}
+              onPress={() => this.test()}
             />
             <View>
               {this.state.fontLoaded ? (
