@@ -16,6 +16,12 @@ import { MapView } from "expo";
 import { Font } from "expo";
 import axios from "axios";
 const url = "https://shrouded-forest-95429.herokuapp.com";
+const url2 = "http://192.168.1.13:4000"
+import socketIOClient from 'socket.io-client'
+const socket = socketIOClient(url);
+socket.on('message', data => {
+  alert(data);
+})
 
 export default class Home extends Component {
   constructor(props) {
@@ -38,11 +44,7 @@ export default class Home extends Component {
   }
 
   test() {
-    axios.get(url).then(res => {
-      console.log("Heroku Responded!")
-    }).catch(err => {
-
-    })
+    socket.emit('message', this.props.user.displayName);
   }
 
   render() {
@@ -99,7 +101,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    marginTop: "7%"
+    marginTop: "10%"
   },
   name: {
     backgroundColor: "transparent",
