@@ -37,13 +37,6 @@ export default class Home extends Component {
     this.props.logOut();
   }
 
-  test() {
-    axios.get(url).then(res => {
-      console.log(res.data.data);
-    }).catch(error => {
-      console.log(error);
-    });
-  }
 
   render() {
     return (
@@ -65,7 +58,6 @@ export default class Home extends Component {
               source={{
                 uri: this.props.user.photoURL
               }}
-              onPress={this.test()}
             />
             <View>
               {this.state.fontLoaded ? (
