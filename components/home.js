@@ -28,7 +28,8 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fontLoaded: false
+      fontLoaded: false,
+      events: []
     };
   }
   async componentWillMount() {
@@ -38,6 +39,13 @@ export default class Home extends Component {
     this.setState({
       fontLoaded: true
     });
+    axios.get(url2 + "/api/events").then(res => {
+      this.setState({
+        events: res.data
+      })
+    }).catch(err => {
+
+    })
   }
 
   logOut() {
@@ -49,6 +57,18 @@ export default class Home extends Component {
   }
 
   render() {
+    let markers;
+    if (this.state.events.length > 0) {
+      markers = this.state.events.map(marker => (
+        <MapView.Marker
+          coordinate={marker.coordinates}
+          title={marker.name}
+          description={marker.description}
+        >
+          <View style={styles.circle} />
+        </MapView.Marker>
+      ))
+    }
     return (
       <View style={styles.container}>
         <MapView
@@ -60,14 +80,7 @@ export default class Home extends Component {
             longitudeDelta: 0.0421
           }}
         >
-          <MapView.Marker
-            coordinate={{
-              latitude: 38.0293,
-              longitude: -78.4767
-            }}
-            title={"Sai"}
-            description={"What's Up"}
-          />
+          {markers}
         </MapView>
         <View style={{ height: 50 }}>
           <View style={styles.header}>
@@ -154,5 +167,13 @@ const styles = StyleSheet.create({
   tab: {
     alignItems: "center",
     justifyContent: "center"
+  },
+  circle: {
+    width: 20,
+    height: 20,
+    borderRadius: 30 / 2,
+    backgroundColor: 'rgba(255,0,0,0.6)',
+    borderWidth: 1,
+    borderColor: 'rgba(255,0,0,1)'
   }
 });
