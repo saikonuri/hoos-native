@@ -1,6 +1,6 @@
 var express = require('express');
 var socket = require('socket.io');
-const mysql = require('mysql');
+var mongoose = require('mongoose');
 
 var app = express();
 var port = process.env.PORT || 4000;
@@ -19,3 +19,14 @@ io.sockets.on('connection', function (socket) {
         socket.broadcast.emit('message', data + " sent a message.")
     });
 });
+
+var mongoDB = 'mongodb://ankithy:hoosactive@ds157653.mlab.com:57653/hoosactive';
+mongoose.connect(mongoDB, {
+    useMongoClient: true
+});
+
+mongoose.Promise = global.Promise;
+
+var db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
