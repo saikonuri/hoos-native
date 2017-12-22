@@ -16,6 +16,7 @@ import { MapView } from "expo";
 import { Font } from "expo";
 import axios from "axios";
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
+import AddModal from './AddEventModal.js'
 const url = "https://shrouded-forest-95429.herokuapp.com";
 const url2 = "http://192.168.1.13:4000"
 import socketIOClient from 'socket.io-client'
@@ -29,9 +30,19 @@ export default class Home extends Component {
     super(props);
     this.state = {
       fontLoaded: false,
-      events: []
+      events: [],
+      addModal: false
     };
   }
+
+  showModal() {
+    this.setState({ addModal: true });
+  }
+
+  closeModal() {
+    this.setState({ addModal: false });
+  }
+
   async componentWillMount() {
     await Font.loadAsync({
       bungee: require("../assets/fonts/Bungee-Regular.ttf")
@@ -39,7 +50,7 @@ export default class Home extends Component {
     this.setState({
       fontLoaded: true
     });
-    axios.get(url2 + "/api/events").then(res => {
+    axios.get(url + "/api/events").then(res => {
       this.setState({
         events: res.data
       })
@@ -64,6 +75,7 @@ export default class Home extends Component {
           coordinate={marker.coordinates}
           title={marker.name}
           description={marker.description}
+          key={marker._id}
         >
           <View style={styles.circle} />
         </MapView.Marker>
@@ -82,6 +94,7 @@ export default class Home extends Component {
         >
           {markers}
         </MapView>
+        <AddModal visible={this.state.addModal} closeModal={() => this.closeModal()} style={styles.modal} />
         <View style={{ height: 50 }}>
           <View style={styles.header}>
             <Avatar
@@ -115,6 +128,7 @@ export default class Home extends Component {
               borderRadius={30}
               title="Add Event"
               backgroundColor="black"
+              onPress={() => this.showModal()}
             />
           </View>
           <View style={styles.tab}><Button
