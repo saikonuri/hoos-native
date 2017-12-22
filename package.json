@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "firebase": "^4.7.0",
     "ip": "^1.1.5",
+    "mongoose": "^4.13.7",
     "mysql": "^2.15.0",
     "native-base": "^2.3.3",
     "react": "16.0.0",

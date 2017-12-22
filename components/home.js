@@ -59,7 +59,16 @@ export default class Home extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421
           }}
-        />
+        >
+          <MapView.Marker
+            coordinate={{
+              latitude: 38.0293,
+              longitude: -78.4767
+            }}
+            title={"Sai"}
+            description={"What's Up"}
+          />
+        </MapView>
         <View style={{ height: 50 }}>
           <View style={styles.header}>
             <Avatar
@@ -86,24 +95,28 @@ export default class Home extends Component {
             />
           </View>
         </View>
-        <BottomNavigation
-          labelColor="white"
-          rippleColor="white"
-          style={{ height: 56, position: 'absolute', left: 0, bottom: 0, right: 0 }}
-        >
-          <Tab
-            barBackgroundColor="#37474F"
-            label="Add Event"
-          />
-          <Tab
-            barBackgroundColor="#37474F"
-            label="Main"
-          />
-          <Tab
-            barBackgroundColor="#37474F"
-            label="My Events"
-          />
-        </BottomNavigation>
+        <View style={styles.nav}>
+          <View style={styles.tab}>
+            <Button
+              small
+              borderRadius={30}
+              title="Add Event"
+              backgroundColor="black"
+            />
+          </View>
+          <View style={styles.tab}><Button
+            small
+            borderRadius={30}
+            title="Home"
+            backgroundColor="black"
+          /></View>
+          <View style={styles.tab}><Button
+            small
+            borderRadius={30}
+            title="My Events"
+            backgroundColor="black"
+          /></View>
+        </View>
       </View>
     );
   }
@@ -129,6 +142,17 @@ const styles = StyleSheet.create({
     marginTop: "10%"
   },
   nav: {
-    marginBottom: "1%"
+    left: 0,
+    right: 0,
+    bottom: 4,
+    height: 40,
+    position: 'absolute',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: "space-around",
+  },
+  tab: {
+    alignItems: "center",
+    justifyContent: "center"
   }
 });

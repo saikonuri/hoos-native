@@ -1,6 +1,7 @@
 var express = require('express');
 var socket = require('socket.io');
 var mongoose = require('mongoose');
+var Event = require('./models/event.js');
 
 var app = express();
 var port = process.env.PORT || 4000;
@@ -9,9 +10,12 @@ var server = app.listen(port, function () {
     console.log(`api running on port ${port}`);
 });
 
-app.get('/', function (req, res) {
-    res.send({ data: "Hello world!" });
-});
+//Get Events
+app.get("/events", function (req, res, next) {
+    Event.find({}).then(function (events) {
+        res.send(events);
+    })
+})
 
 var io = socket(server);
 io.sockets.on('connection', function (socket) {
