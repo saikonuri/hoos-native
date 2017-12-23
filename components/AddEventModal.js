@@ -1,6 +1,5 @@
-import { TouchableOpacity } from 'react-native'
-import Modal from 'react-native-modal'
-import { FormLabel, FormInput } from 'react-native-elements'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal } from 'react-native'
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
     Container,
@@ -11,19 +10,32 @@ import {
     Left,
     Right,
     Body,
-    Icon
+    Form,
+    Item,
+    Input
 } from "native-base";
-import { StyleSheet, View, AsyncStorage, Text } from "react-native";
+import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
 import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
+import TimePicker from './TimePicker.js'
+import locations from '../assets/areas.json'
 import axios from "axios";
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { locale } from 'moment';
+const url = "https://shrouded-forest-95429.herokuapp.com";
+const url2 = "http://192.168.1.13:4000"
 
 export default class AddModal extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            fontLoaded: false
+            fontLoaded: false,
+            selectedLocation: 'Aquatics and Fitness Center',
+            name: '',
+            description: '',
+            startDate: null,
+            endDate: null
         }
     }
 
@@ -36,63 +48,112 @@ export default class AddModal extends Component {
         });
     }
 
+    createEvent() {
+        axios.post(url + "/api/events", {
+            name: this.state.name,
+            description: this.state.description,
+            startDate: this.state.startDate,
+            endDate: this.state.endDate,
+            location: this.state.selectedLocation,
+            creator: this.props.user.email
+        }).then(res => {
+            console.log(res);
+        })
+        this.props.closeModal();
+    }
+
     render() {
+        let count = 0;
+        let pickerItems = locations.map(location => {
+            return (
+                <Picker.Item label={location.name} value={location.name} id={count++} />
+            );
+        })
+
         return (
             <Modal
                 visible={this.props.visible}
-                animationType={'slide'}
-                onRequestClose={() => this.props.closeModal()}
-                style={styles.modal}>
-                <View style={styles.innerContainer}>
-                    {this.state.fontLoaded ? (
-                        <Text style={styles.FormTitle}>Add Event</Text>
-                    ) : (
-                            <Text>"Add Event"</Text>
-                        )}
-                    <FormLabel>Name</FormLabel>
-                    <FormInput />
-                    <FormLabel>Location</FormLabel>
-                    <FormInput />
-                    <FormLabel>Date</FormLabel>
-                    <FormInput />
-                    <FormLabel>Time</FormLabel>
-                    <FormInput />
-                    <View flexDirection="row" justifyContent="center">
-                        <Button
-                            onPress={() => this.props.closeModal()}
-                            title="Add"
-                            borderRadius={30}
-                            backgroundColor="black"
-                        >
-                        </Button>
-                        <Button
-                            onPress={() => this.props.closeModal()}
-                            title="Cancel"
-                            borderRadius={30}
-                            backgroundColor="black"
-                        >
-                        </Button>
+                animationType='slide'
+                transparent={true}
+            >
+                <View style={styles.modal}>
+                    <TouchableOpacity
+                        onPress={() => {
+                            this.props.closeModal();
+                        }}
+                        style={styles.close}
+                    >
+                        <Icon name="arrow-left" size={20} />
+                    </TouchableOpacity>
+                    <View style={styles.form}>
+                        <Form>
+                            {this.state.fontLoaded ? (
+                                <Title style={{ fontFamily: 'bungee' }}>Add Event</Title>
+                            ) : (
+                                    <Title>"Add Event"</Title>
+                                )}
+                            <Item>
+                                <Input placeholder="Name of Event" onChangeText={(text) => this.setState({ name: text })} />
+                            </Item>
+                            <Item>
+                                <Input placeholder="Description" onChangeText={(text) => this.setState({ description: text })} />
+                            </Item>
+                        </Form>
+                        <TimePicker placeholder='Select Start Date/Time' updateDate={(date) => this.setState({ startDate: date })} />
+                        <TimePicker placeholder='Select End Date/Time' updateDate={(date) => this.setState({ endDate: date })} />
+                        <Picker
+                            selectedValue={this.state.selectedLocation}
+                            onValueChange={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}>
+                            {pickerItems}
+                        </Picker>
+                        <View style={{ width: 150, marginLeft: 75 }}>
+                            <Button
+                                small
+                                borderRadius={30}
+                                title="Confirm"
+                                backgroundColor="black"
+                                onPress={() => this.createEvent()}
+                            />
+                        </View>
+                        <View style={{ width: 150, marginLeft: 75 }}>
+                            <Button
+                                small
+                                borderRadius={30}
+                                title="Cancel"
+                                backgroundColor="black"
+                                onPress={() => this.props.closeModal()}
+                            />
+                        </View>
                     </View>
                 </View>
-            </Modal>
+
+            </Modal >
         );
     }
 }
 
 const styles = {
-    innerContainer: {
-        backgroundColor: "white"
-    },
-    FormLabel: {
-        color: "white"
-    },
-    FormTitle: {
-        textAlign: "center",
-        fontSize: 25,
-        fontFamily: "bungee",
-        color: "black",
-    },
     modal: {
-        top: 70
+        marginTop: 100,
+        backgroundColor: 'white',
+        borderRadius: 30,
+        height: 600,
+        marginLeft: 20,
+        marginRight: 20,
+    },
+    close: {
+        marginTop: 8,
+        marginLeft: 8,
+        width: 20
+    },
+    form: {
+        width: 300,
+        marginLeft: '6%',
+        flex: 2,
+        flexDirection: 'column',
+        justifyContent: 'space-around'
+    },
+    date: {
+
     }
 }

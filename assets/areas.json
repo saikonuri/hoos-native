@@ -1,0 +1,106 @@
+[
+    {
+        "name": "Carr's Hill Field",
+        "coordinates": {
+            "latitude": 38.0403,
+            "longitude": -78.5056
+        },
+        "id": 0
+    },
+    {
+        "name": "Copeley Field",
+        "coordinates": {
+            "latitude": 38.0513,
+            "longitude": -78.5112
+        },
+        "id": 2
+    },
+    {
+        "name": "Lambeth Field",
+        "coordinates": {
+            "latitude": 38.0411,
+            "longitude": -78.5032
+        },
+        "id": 3
+    },
+    {
+        "name": "Madison Bowl Field",
+        "coordinates": {
+            "latitude": 38.0377,
+            "longitude": -78.5024
+        },
+        "id": 4
+    },
+    {
+        "name": "Nameless Fields",
+        "coordinates": {
+            "latitude": 38.0375,
+            "longitude": -78.5061
+        },
+        "id": 5
+    },
+    {
+        "name": "Perry-Fishburne Tennis & Dell Basketball Courts",
+        "coordinates": {
+            "latitude": 38.0363,
+            "longitude": -78.5104
+        },
+        "id": 6
+    },
+    {
+        "name": "Aquatics and Fitness Center",
+        "coordinates": {
+            "latitude": 38.0329,
+            "longitude": -78.5135
+        },
+        "id": 7
+    },
+    {
+        "name": "North Grounds Recreation Center",
+        "coordinates": {
+            "latitude": 38.0509,
+            "longitude": -78.5131
+        },
+        "id": 8
+    },
+    {
+        "name": "Memorial Gymnasium",
+        "coordinates": {
+            "latitude": 38.0375,
+            "longitude": -78.5071
+        },
+        "id": 9
+    },
+    {
+        "name": "Slaughter Recreation Center",
+        "coordinates": {
+            "latitude": 38.0403,
+            "longitude": -78.5056
+        },
+        "id": 10
+    },
+    {
+        "name": "Snyder Tennis Courts",
+        "coordinates": {
+            "latitude": 38.0386,
+            "longitude": -78.5065
+        },
+        "id": 11
+    },
+    {
+        "name": "Boar's Head Sports Club",
+        "coordinates": {
+            "latitude": 38.0485,
+            "longitude": -78.5419
+        },
+        "id": 12
+    },
+    {
+        "name": "The Park",
+        "coordinates": {
+            "latitude": 38.0531,
+            "longitude": -78.5047
+        },
+        "id": 13
+    }
+]
