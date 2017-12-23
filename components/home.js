@@ -20,7 +20,7 @@ import AddModal from './AddEventModal.js'
 import locations from '../assets/areas.json'
 import mapStyle from '../assets/mapstyle.json'
 const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.13:4000"
+const url2 = "http://192.168.1.160:4000"
 import socketIOClient from 'socket.io-client'
 const socket = socketIOClient(url);
 
@@ -51,13 +51,22 @@ export default class Home extends Component {
     this.setState({
       fontLoaded: true
     });
-    axios.get(url + "/api/events").then(res => {
-      this.setState({
-        events: res.data
-      })
-    }).catch(err => {
+  }
 
-    })
+  componentDidMount() {
+    this.fetchEvents();
+  }
+
+  fetchEvents() {
+    axios.get(url + "/api/events")
+      .then(res => {
+        this.setState({
+          events: res.data
+        })
+      })
+      .catch(function (error) {
+        console.log('Request failure: ', error);
+      });
   }
 
   logOut() {
@@ -70,20 +79,17 @@ export default class Home extends Component {
 
   render() {
     let markers;
-    if (this.state.events.length > 0) {
-      markers = locations.map(marker => (
-        <MapView.Marker
-          coordinate={marker.coordinates}
-          title={marker.name}
-          key={marker.id}
-        >
-          <View style={styles.circle} />
-          <MapView.Callout>
-            <Text style={{ width: 100 }}>{marker.name}</Text>
-          </MapView.Callout>
-        </MapView.Marker>
-      ))
-    }
+    markers = locations.map(marker => (
+      <MapView.Marker
+        coordinate={marker.coordinates}
+        title={marker.name}
+        key={marker.id}
+      >
+        <View style={styles.circle} />
+
+      </MapView.Marker>
+    ))
+
     return (
       <View style={styles.container}>
         <MapView
@@ -94,8 +100,6 @@ export default class Home extends Component {
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
-          customMapStyle={mapStyle}
-          provider={MapView.PROVIDER_GOOGLE}
         >
           {markers}
         </MapView>

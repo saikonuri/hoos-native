@@ -24,7 +24,7 @@ import axios from "axios";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
 const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.13:4000"
+const url2 = "http://192.168.1.160:4000"
 
 export default class AddModal extends Component {
     constructor(props) {
@@ -49,16 +49,23 @@ export default class AddModal extends Component {
     }
 
     createEvent() {
-        axios.post(url + "/api/events", {
+        let body = {
             name: this.state.name,
             description: this.state.description,
             startDate: this.state.startDate,
             endDate: this.state.endDate,
             location: this.state.selectedLocation,
             creator: this.props.user.email
-        }).then(res => {
-            console.log(res);
+        }
+        axios({
+            method: 'post',
+            url: url + '/api/events',
+            data: body
         })
+            .then((res) => console.log(res))
+            .catch((error) => {
+                console.log(error);
+            });
         this.props.closeModal();
     }
 

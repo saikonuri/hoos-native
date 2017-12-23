@@ -5,7 +5,11 @@ const Event = require("../models/event.js");
 
 // Get Events
 router.get("/events", function (req, res, next) {
-    Event.find({}).then(function (events) {
+    console.log('someone requested data');
+    Event.find({}).then(function (events, err) {
+        if (err) {
+            throw err;
+        }
         res.send(events);
     });
 });
@@ -24,7 +28,31 @@ router.post("/events", function (req, res) {
         if (err) {
             throw err;
         }
-        res.status(200);
+        res.json(event);
+    })
+})
+
+//Edit Event
+router.put("/events/:id", function (req, res) {
+    Event.findOne({ _id: req.params.id }, function (err, event) {
+        if (err) {
+            throw err;
+        }
+
+        event.name = req.body.name;
+        event.description = req.body.description;
+        event.location = req.body.location;
+        event.startDate = req.body.startDate;
+        event.endDate = req.body.endDate;
+        event.going = req.body.going;
+        event.notGoing = req.body.notGoing;
+
+        event.save(function (err, event) {
+            if (err) {
+                throw err;
+            }
+            res.json(event);
+        })
     })
 })
 
