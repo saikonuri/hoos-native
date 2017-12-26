@@ -59,7 +59,7 @@ export default class AddModal extends Component {
         }
         axios({
             method: 'post',
-            url: url + '/api/events',
+            url: url2 + '/api/events',
             data: body
         })
             .then((res) => console.log(res))
@@ -73,7 +73,7 @@ export default class AddModal extends Component {
         let count = 0;
         let pickerItems = locations.map(location => {
             return (
-                <Picker.Item label={location.name} value={location.name} id={count++} />
+                <Picker.Item label={location.name} value={location.name} id={count--} />
             );
         })
 

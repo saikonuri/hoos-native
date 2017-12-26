@@ -7,11 +7,10 @@ import {
   FooterTab,
   Left,
   Right,
-  Body,
-  Icon
+  Body
 } from "native-base";
-import { StyleSheet, View, AsyncStorage, Text, TouchableWithoutFeedback } from "react-native";
-import { Header, Avatar, Button } from "react-native-elements";
+import { StyleSheet, View, AsyncStorage, Text, TouchableWithoutFeedback, FlatList, TouchableOpacity } from "react-native";
+import { Header, Avatar, Button, Icon } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
 import axios from "axios";
@@ -24,7 +23,7 @@ const url2 = "http://192.168.1.160:4000"
 import socketIOClient from 'socket.io-client'
 const socket = socketIOClient(url);
 
-
+const icons = ["trending-down", "trending-neutral", "trending-up"];
 
 export default class Home extends Component {
   constructor(props) {
@@ -32,7 +31,8 @@ export default class Home extends Component {
     this.state = {
       fontLoaded: false,
       events: [],
-      addModal: false
+      addModal: false,
+      numEvents: 0
     };
   }
 
@@ -58,10 +58,11 @@ export default class Home extends Component {
   }
 
   fetchEvents() {
-    axios.get(url + "/api/events")
+    axios.get(url2 + "/api/events")
       .then(res => {
         this.setState({
-          events: res.data
+          events: res.data,
+          numEvents: res.data.length
         })
       })
       .catch(function (error) {
@@ -77,18 +78,81 @@ export default class Home extends Component {
     socket.emit('message', this.props.user.displayName);
   }
 
+  getCount(name) {
+    let count = 0;
+    this.state.events.map(event => {
+      if (event.location === name) {
+        count++;
+      }
+    })
+    return count;
+  }
+
+  returnIcon(name) {
+    let ratio = this.getCount(name) / (this.state.numEvents);
+    if (ratio > 0.67) {
+      return (
+        <Icon name={icons[2]} type="material-community" />
+      )
+    }
+    else if (ratio > 0.33) {
+      return (
+        <Icon name={icons[1]} type="material-community" />
+      )
+    }
+    else {
+      return (
+        <Icon name={icons[0]} type="material-community" />
+      )
+    }
+  }
+
+  getColor(name) {
+    let ratio = this.getCount(name) / (this.state.numEvents);
+    if (ratio > 0.67) {
+      return "#28b21e"
+    }
+    else if (ratio > 0.33) {
+      return (
+        "#f9e140"
+      )
+    }
+    else {
+      return (
+        "#f4563a"
+      )
+    }
+  }
+
   render() {
     let markers;
-    markers = locations.map(marker => (
-      <MapView.Marker
-        coordinate={marker.coordinates}
-        title={marker.name}
-        key={marker.id}
-      >
-        <View style={styles.circle} />
+    markers = locations.map(marker => {
+      let color = this.getColor(marker.name);
+      return (
+        <MapView.Marker
+          coordinate={marker.coordinates}
+          title={marker.name}
+          key={marker.id}
 
-      </MapView.Marker>
-    ))
+        >
+          <View style={{
+            width: 30,
+            height: 30,
+            borderRadius: 30 / 2,
+            borderWidth: 1,
+            backgroundColor: color
+          }}>
+            {this.returnIcon(marker.name)}
+          </View>
+          <MapView.Callout width={250}>
+            <Text style={{ fontWeight: 'bold' }}>{marker.name}</Text>
+            <Text>Number of Events: {this.getCount(marker.name)}</Text>
+            <Text style={{ color: "#3b79dd" }} onPress={() => console.log(marker.name + " pressed!")}>Click Here For Current Games</Text>
+          </MapView.Callout>
+        </MapView.Marker>
+
+      )
+    })
 
     return (
       <View style={styles.container}>
@@ -201,11 +265,9 @@ const styles = StyleSheet.create({
     justifyContent: "center"
   },
   circle: {
-    width: 20,
-    height: 20,
+    width: 30,
+    height: 30,
     borderRadius: 30 / 2,
-    backgroundColor: 'rgba(255,0,0,0.6)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,0,0,1)'
+    borderWidth: 1
   }
 });

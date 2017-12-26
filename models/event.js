@@ -10,7 +10,8 @@ var EventSchema = new Schema({
     endDate: String,
     creator: String,
     going: [String],
-    notGoing: [String]
+    notGoing: [String],
+    key: String
 });
 
 module.exports = mongoose.model('Event', EventSchema);

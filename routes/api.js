@@ -5,7 +5,6 @@ const Event = require("../models/event.js");
 
 // Get Events
 router.get("/events", function (req, res, next) {
-    console.log('someone requested data');
     Event.find({}).then(function (events, err) {
         if (err) {
             throw err;
@@ -13,6 +12,16 @@ router.get("/events", function (req, res, next) {
         res.send(events);
     });
 });
+
+//Get Events at a Certain Location
+router.get("/events/:location", function (req, res, next) {
+    Event.find({ location: req.params.location }).then((events, err) => {
+        if (err) {
+            throw err;
+        }
+        res.send(events);
+    })
+})
 
 //Post Event
 router.post("/events", function (req, res) {
@@ -24,6 +33,7 @@ router.post("/events", function (req, res) {
         endDate: req.body.endDate,
         description: req.body.description
     });
+    event.key = event._id;
     event.save(err => {
         if (err) {
             throw err;
@@ -53,6 +63,16 @@ router.put("/events/:id", function (req, res) {
             }
             res.json(event);
         })
+    })
+})
+
+// Delete an Event
+router.delete("/events/:id", function (req, res, next) {
+    Event.findByIdAndRemove(req.params.id, function (err, event) {
+        if (err) {
+            throw err;
+        }
+        res.json(event);
     })
 })
 
