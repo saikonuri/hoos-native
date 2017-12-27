@@ -4,6 +4,11 @@ import Login from "./components/login.js";
 import Home from "./components/home.js";
 import * as firebase from "firebase";
 import Expo from "expo";
+import axios from "axios";
+
+const url = "https://shrouded-forest-95429.herokuapp.com";
+const url2 = "http://192.168.1.160:4000";
+
 
 var config = {
   apiKey: "AIzaSyBn91DlEuk_grmuj9BC30PTNCRKEV92zWo",
@@ -36,10 +41,25 @@ export default class App extends React.Component {
         this.setState({
           loggedIn: true,
           user: JSON.parse(res)
-        });
+        }, function () {
+          this.checkUser();
+        })
       }
     });
   }
+
+  checkUser() {
+    let body = {
+      displayName: this.state.user.displayName,
+      email: this.state.user.email
+    }
+    axios.put(url + "/user", body).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
   async signInWithGoogleAsync() {
     try {
       const result = await Expo.Google.logInAsync({

@@ -3,6 +3,7 @@ var socket = require('socket.io');
 var mongoose = require('mongoose');
 var bodyParser = require("body-parser");
 const routes = require("./routes/api");
+const User = require("./models/user.js");
 
 var Event = require('./models/event.js');
 var router = express.Router();
@@ -43,6 +44,29 @@ var server = app.listen(port, function () {
 });
 
 app.use("/api", routes);
+
+app.put("/user", function (req, res, next) {
+    User.find({ displayName: req.body.displayName, email: req.body.email }, function (err, users) {
+        if (err) {
+            throw err;
+        }
+        if (users.length > 0) {
+            res.send(users);
+        }
+        else {
+            let newUser = new User({
+                displayName: req.body.displayName,
+                email: req.body.email
+            });
+            newUser.save(err => {
+                if (err) {
+                    throw err;
+                }
+                res.send(newUser);
+            })
+        }
+    })
+})
 
 var io = socket(server);
 io.sockets.on('connection', function (socket) {

@@ -58,7 +58,7 @@ export default class Home extends Component {
   }
 
   fetchEvents() {
-    axios.get(url2 + "/api/events")
+    axios.get(url + "/api/events")
       .then(res => {
         this.setState({
           events: res.data,

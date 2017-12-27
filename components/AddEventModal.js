@@ -59,7 +59,7 @@ export default class AddModal extends Component {
         }
         axios({
             method: 'post',
-            url: url2 + '/api/events',
+            url: url + '/api/events',
             data: body
         })
             .then((res) => console.log(res))

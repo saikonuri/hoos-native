@@ -3,6 +3,8 @@ const router = express.Router();
 
 const Event = require("../models/event.js");
 
+const User = require("../models/user.js");
+
 // Get Events
 router.get("/events", function (req, res, next) {
     Event.find({}).then(function (events, err) {
