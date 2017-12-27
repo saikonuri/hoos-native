@@ -16,8 +16,10 @@ import { Font } from "expo";
 import axios from "axios";
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import AddModal from './AddEventModal.js'
+import LocationModal from './LocationModal.js'
 import locations from '../assets/areas.json'
 import mapStyle from '../assets/mapstyle.json'
+
 const url = "https://shrouded-forest-95429.herokuapp.com";
 const url2 = "http://192.168.1.160:4000"
 import socketIOClient from 'socket.io-client'
@@ -32,7 +34,9 @@ export default class Home extends Component {
       fontLoaded: false,
       events: [],
       addModal: false,
-      numEvents: 0
+      numEvents: 0,
+      locationModal: false,
+      selectedLocation: ""
     };
   }
 
@@ -42,6 +46,10 @@ export default class Home extends Component {
 
   closeModal() {
     this.setState({ addModal: false });
+  }
+
+  closeLocationModal() {
+    this.setState({ locationModal: false });
   }
 
   async componentWillMount() {
@@ -136,9 +144,9 @@ export default class Home extends Component {
 
         >
           <View style={{
-            width: 30,
-            height: 30,
-            borderRadius: 30 / 2,
+            width: 24,
+            height: 24,
+            borderRadius: 24 / 2,
             borderWidth: 1,
             backgroundColor: color
           }}>
@@ -147,20 +155,24 @@ export default class Home extends Component {
           <MapView.Callout width={250}>
             <Text style={{ fontWeight: 'bold' }}>{marker.name}</Text>
             <Text>Number of Events: {this.getCount(marker.name)}</Text>
-            <Text style={{ color: "#3b79dd" }} onPress={() => console.log(marker.name + " pressed!")}>Click Here For Current Games</Text>
+            <Text style={{ color: "#3b79dd" }} onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>Click Here For Current Games</Text>
           </MapView.Callout>
         </MapView.Marker>
 
       )
     })
 
+    let locModal;
+    if (this.state.locationModal) {
+      locModal = <LocationModal visible={this.state.locationModal} location={this.state.selectedLocation} closeModal={() => this.closeLocationModal()} user={this.props.user} />
+    }
     return (
-      <View style={styles.container}>
+      < View style={styles.container} >
         <MapView
           style={styles.map}
           initialRegion={{
-            latitude: 38.0293,
-            longitude: -78.4767,
+            latitude: 38.0329,
+            longitude: -78.5135,
             latitudeDelta: 0.0922,
             longitudeDelta: 0.0421,
           }}
@@ -169,7 +181,7 @@ export default class Home extends Component {
         </MapView>
 
         <AddModal visible={this.state.addModal} closeModal={() => this.closeModal()} user={this.props.user} />
-
+        {locModal}
         <View style={styles.header}>
           <View>
             <Avatar
@@ -209,12 +221,7 @@ export default class Home extends Component {
               onPress={() => this.showModal()}
             />
           </View>
-          <View style={styles.tab}><Button
-            small
-            borderRadius={30}
-            title="Home"
-            backgroundColor="black"
-          /></View>
+
           <View style={styles.tab}><Button
             small
             borderRadius={30}
@@ -222,7 +229,7 @@ export default class Home extends Component {
             backgroundColor="black"
           /></View>
         </View>
-      </View>
+      </View >
     );
   }
 }

@@ -3,7 +3,8 @@ var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
     displayName: String,
-    email: String
+    email: String,
+    events: [String]
 });
 
 module.exports = mongoose.model('User', UserSchema);
