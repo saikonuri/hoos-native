@@ -8,19 +8,10 @@ import axios from "axios";
 
 const url = "https://shrouded-forest-95429.herokuapp.com";
 const url2 = "http://192.168.1.160:4000";
-
-
-var config = {
-  apiKey: "AIzaSyBn91DlEuk_grmuj9BC30PTNCRKEV92zWo",
-  authDomain: "hoosnative.firebaseapp.com",
-  databaseURL: "https://hoosnative.firebaseio.com",
-  projectId: "hoosnative",
-  storageBucket: "hoosnative.appspot.com",
-  messagingSenderId: "468327093282"
-};
-
-firebase.initializeApp(config);
+import fb from './firebase.js'
+var db = firebase.database();
 var provider = new firebase.auth.GoogleAuthProvider();
+import areas from './assets/areas.json';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -49,14 +40,16 @@ export default class App extends React.Component {
   }
 
   checkUser() {
-    let body = {
-      displayName: this.state.user.displayName,
-      email: this.state.user.email
+    var user = this.state.user;
+    var last = 0;
+    for(i = 0;i<user.email.length;i++){
+      if(user.email[i] == '@'){
+        last = i;
+        break;
+      }
     }
-    axios.put(url + "/user", body).then(res => {
-      console.log(res.data);
-    }).catch(err => {
-      console.log(err);
+    db.ref('users/'+user.email.substr(0,last)).set({
+      name: user.displayName
     })
   }
 

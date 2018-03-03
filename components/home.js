@@ -17,8 +17,12 @@ import axios from "axios";
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import AddModal from './AddEventModal.js'
 import LocationModal from './LocationModal.js'
-import locations from '../assets/areas.json'
 import mapStyle from '../assets/mapstyle.json'
+import locations from '../assets/areas.json'
+import fb from '../firebase.js'
+import * as firebase from "firebase";
+
+var db = firebase.database();
 
 const url = "https://shrouded-forest-95429.herokuapp.com";
 const url2 = "http://192.168.1.160:4000"
@@ -31,6 +35,7 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      locations: [],
       fontLoaded: false,
       events: [],
       addModal: false,
@@ -133,6 +138,7 @@ export default class Home extends Component {
   }
 
   render() {
+  
     let markers;
     markers = locations.map(marker => {
       let color = this.getColor(marker.name);

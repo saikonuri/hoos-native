@@ -23,8 +23,10 @@ import locations from '../assets/areas.json'
 import axios from "axios";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
-const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.160:4000"
+import * as firebase from "firebase";
+import fb from "../firebase.js";
+
+var db = firebase.database();
 
 export default class AddModal extends Component {
     constructor(props) {
@@ -73,7 +75,7 @@ export default class AddModal extends Component {
         let count = 0;
         let pickerItems = locations.map(location => {
             return (
-                <Picker.Item label={location.name} value={location.name} id={count--} />
+                <Picker.Item label={location.name} value={location.name} key={count--} />
             );
         })
 
