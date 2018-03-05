@@ -5,13 +5,13 @@ import Home from "./components/home.js";
 import * as firebase from "firebase";
 import Expo from "expo";
 import axios from "axios";
-
-const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.160:4000";
 import fb from './firebase.js'
-var db = firebase.database();
-var provider = new firebase.auth.GoogleAuthProvider();
 import areas from './assets/areas.json';
+
+var db = firebase.database();
+var url = 'http://192.168.1.180:4000'
+var provider = new firebase.auth.GoogleAuthProvider();
+
 
 export default class App extends React.Component {
   constructor(props) {
@@ -40,16 +40,14 @@ export default class App extends React.Component {
   }
 
   checkUser() {
-    var user = this.state.user;
-    var last = 0;
-    for(i = 0;i<user.email.length;i++){
-      if(user.email[i] == '@'){
-        last = i;
-        break;
-      }
+    let body = {
+      displayName: this.state.user.displayName,
+      email: this.state.user.email
     }
-    db.ref('users/'+user.email.substr(0,last)).set({
-      name: user.displayName
+    axios.put(url + "/user", body).then(res => {
+      console.log(res.data);
+    }).catch(err => {
+      console.log(err);
     })
   }
 

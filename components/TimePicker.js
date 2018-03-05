@@ -5,14 +5,11 @@ var moment = require('moment');
 export default class MyDatePicker extends Component {
     constructor(props) {
         super(props)
-        this.state = { date: false }
+        this.state = { date: new Date() }
     }
 
     render() {
         let date = this.state.date;
-        if (date !== false) {
-            date = moment(this.state.date, 'MMMM Do YYYY, h:mm:ss a');
-        }
         let currDate = new Date();
         let max = new Date();
         max.setFullYear(currDate.getFullYear + 1);

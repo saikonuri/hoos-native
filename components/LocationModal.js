@@ -23,8 +23,7 @@ import locations from '../assets/areas.json'
 import axios from "axios";
 import { locale } from 'moment';
 
-const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.160:4000"
+const url = "http://192.168.1.180:4000"
 
 export default class LocationModal extends Component {
     constructor(props) {
@@ -62,9 +61,8 @@ export default class LocationModal extends Component {
 
     render() {
         let events = this.state.events.map(event => {
-
             return (
-                <View style={styles.events} key={events._id}>
+                <View style={styles.events} key={event.key}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{event.name}</Text>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{

@@ -21,12 +21,9 @@ import mapStyle from '../assets/mapstyle.json'
 import locations from '../assets/areas.json'
 import fb from '../firebase.js'
 import * as firebase from "firebase";
-
-var db = firebase.database();
-
-const url = "https://shrouded-forest-95429.herokuapp.com";
-const url2 = "http://192.168.1.160:4000"
 import socketIOClient from 'socket.io-client'
+var db = firebase.database();
+var url = 'http://192.168.1.180:4000'
 const socket = socketIOClient(url);
 
 const icons = ["trending-down", "trending-neutral", "trending-up"];

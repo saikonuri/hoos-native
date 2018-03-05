@@ -25,7 +25,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
 import * as firebase from "firebase";
 import fb from "../firebase.js";
-
+var url = 'http://192.168.1.180:4000'
 var db = firebase.database();
 
 export default class AddModal extends Component {
@@ -144,11 +144,11 @@ export default class AddModal extends Component {
 const styles = {
     modal: {
         marginTop: 100,
-        backgroundColor: 'white',
+        backgroundColor: '#FFEFD5',
         borderRadius: 30,
         height: 600,
         marginLeft: 20,
-        marginRight: 20,
+        marginRight: 20
     },
     close: {
         marginTop: 8,
