@@ -5,9 +5,9 @@ const Event = require("../models/event.js");
 
 const User = require("../models/user.js");
 
-// Get Events
+// Get All Events
 router.get("/events", function (req, res, next) {
-    Event.find({}).then(function (events, err) {
+    Event.find({}, (err, events) => {
         if (err) {
             throw err;
         }
@@ -15,9 +15,9 @@ router.get("/events", function (req, res, next) {
     });
 });
 
-//Get Events at a Certain Location
+// Get Events at a Certain Location
 router.get("/events/:location", function (req, res, next) {
-    Event.find({ location: req.params.location }).then((events, err) => {
+    Event.find({ location: req.params.location },(events, err) => {
         if (err) {
             throw err;
         }
@@ -25,7 +25,7 @@ router.get("/events/:location", function (req, res, next) {
     })
 })
 
-//Post Event
+// Post a new Event
 router.post("/events", function (req, res) {
     var event = new Event({
         name: req.body.name,
@@ -44,9 +44,9 @@ router.post("/events", function (req, res) {
     })
 })
 
-//Edit Event
+//Edit an existing Event
 router.put("/events/:id", function (req, res) {
-    Event.findOne({ _id: req.params.id }, function (err, event) {
+    Event.findOne({ _id: req.params.id }, (err, event) => {
         if (err) {
             throw err;
         }
@@ -59,7 +59,7 @@ router.put("/events/:id", function (req, res) {
         event.going = req.body.going;
         event.notGoing = req.body.notGoing;
 
-        event.save(function (err, event) {
+        event.save((err, event) => {
             if (err) {
                 throw err;
             }
@@ -68,9 +68,9 @@ router.put("/events/:id", function (req, res) {
     })
 })
 
-// Delete an Event
+// Delete an existing Event
 router.delete("/events/:id", function (req, res, next) {
-    Event.findByIdAndRemove(req.params.id, function (err, event) {
+    Event.findByIdAndRemove(req.params.id, (err, event) => {
         if (err) {
             throw err;
         }

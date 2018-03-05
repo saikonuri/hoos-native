@@ -25,9 +25,10 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
 import * as firebase from "firebase";
 import fb from "../firebase.js";
-var url = 'http://192.168.1.180:4000'
-var db = firebase.database();
 
+var url = 'http://192.168.1.180:4000';
+
+// The AddModal Component: When we create a new event, this modal pops up
 export default class AddModal extends Component {
     constructor(props) {
         super(props);
@@ -64,7 +65,7 @@ export default class AddModal extends Component {
             url: url + '/api/events',
             data: body
         })
-            .then((res) => console.log(res))
+            .then((res) => {})
             .catch((error) => {
                 console.log(error);
             });

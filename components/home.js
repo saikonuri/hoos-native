@@ -22,12 +22,13 @@ import locations from '../assets/areas.json'
 import fb from '../firebase.js'
 import * as firebase from "firebase";
 import socketIOClient from 'socket.io-client'
-var db = firebase.database();
-var url = 'http://192.168.1.180:4000'
-const socket = socketIOClient(url);
 
+var url = 'http://192.168.1.180:4000'
+
+// The three trends that we use to show how popular a location is on the map
 const icons = ["trending-down", "trending-neutral", "trending-up"];
 
+// The Home Component: Consists of Map, buttons to trigger Add and Edit Modals, and Logout button 
 export default class Home extends Component {
   constructor(props) {
     super(props);
@@ -82,10 +83,6 @@ export default class Home extends Component {
 
   logOut() {
     this.props.logOut();
-  }
-
-  test() {
-    socket.emit('message', this.props.user.displayName);
   }
 
   getCount(name) {

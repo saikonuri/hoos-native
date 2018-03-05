@@ -2,6 +2,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+// The Schema for the Event collection
 var EventSchema = new Schema({
     name: String,
     location: String,
@@ -14,4 +15,5 @@ var EventSchema = new Schema({
     key: String
 });
 
+// Exporting the Model for the EventSchema to be used in server.js and api.js
 module.exports = mongoose.model('Event', EventSchema);

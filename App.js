@@ -8,11 +8,16 @@ import axios from "axios";
 import fb from './firebase.js'
 import areas from './assets/areas.json';
 
-var db = firebase.database();
+// The url to server.js so we can make requests to our express server which is connected to MongoDB
+// App.js (or any component) ---> makes request to server/api ---> server.js/api.js ---> Query Database ---> MongoDB
+// Note: Change this url everytime to your own IP address since mine not be running when you are coding
+// Eventually the URL will change when we deploy our express server to a cloud provider, then everyone can have same URL
 var url = 'http://192.168.1.180:4000'
+
+// Firebase offers Google Auth Service
 var provider = new firebase.auth.GoogleAuthProvider();
 
-
+// App Component: The first component that is mounted when the application starts
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -21,11 +26,13 @@ export default class App extends React.Component {
       user: null
     };
   }
-
+  
+  // Method triggered one time, right before the component is mounted
   componentWillMount() {
     this.updateLogin();
   }
 
+  // Checks to see if the user recently logged in to the app on their device
   updateLogin() {
     AsyncStorage.getItem("user").then(res => {
       if (res !== null && res !== "{}") {
@@ -39,18 +46,19 @@ export default class App extends React.Component {
     });
   }
 
+  // If new user, inserts them into MongoDB, else ignores
   checkUser() {
     let body = {
       displayName: this.state.user.displayName,
       email: this.state.user.email
     }
     axios.put(url + "/user", body).then(res => {
-      console.log(res.data);
     }).catch(err => {
       console.log(err);
     })
   }
 
+  // Using Expo and Firebase to allow users login with gmail (don't worry about this)
   async signInWithGoogleAsync() {
     try {
       const result = await Expo.Google.logInAsync({
@@ -82,6 +90,7 @@ export default class App extends React.Component {
     }
   }
 
+  // When user logs out, changing the local storage so that app doesn't automatically log them in next time they open the app
   logOut() {
     AsyncStorage.setItem("user", "");
     this.setState({
@@ -89,6 +98,7 @@ export default class App extends React.Component {
     });
   }
 
+  // Using Expo and firebase to log in with Facebook (Taking out Facebook tho so don't worry)
   async logIn() {
     const { type, token } = await Expo.Facebook.logInWithReadPermissionsAsync(
       "132357100763432",
@@ -111,8 +121,7 @@ export default class App extends React.Component {
     }
   }
 
-
-
+  // Rendering = Mounting -> Everytime state changes, render is called. "return" has the actual HTML we return to the screen
   render() {
     if (this.state.loggedIn) {
       return <Home user={this.state.user} logOut={() => this.logOut()} />;
@@ -130,12 +139,3 @@ export default class App extends React.Component {
     }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center"
-  }
-});
