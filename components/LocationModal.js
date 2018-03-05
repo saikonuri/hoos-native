@@ -64,7 +64,7 @@ export default class LocationModal extends Component {
         let events = this.state.events.map(event => {
 
             return (
-                <View style={styles.events}>
+                <View style={styles.events} key={events._id}>
                     <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{event.name}</Text>
                     <View style={{ flex: 1, flexDirection: 'row' }}>
                         <View style={{
