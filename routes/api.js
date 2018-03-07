@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
-
 const Event = require("../models/event.js");
-
 const User = require("../models/user.js");
 
 // Get All Events
@@ -16,8 +14,19 @@ router.get("/events", function (req, res, next) {
 });
 
 // Get Events at a Certain Location
-router.get("/events/:location", function (req, res, next) {
-    Event.find({ location: req.params.location },(events, err) => {
+router.get("/events/location/:location", function (req, res, next) {
+    // console.log(req.params)
+    Event.find({location : req.params.location} , (err, events) => {
+        if (err) {
+            throw err;
+        }
+        res.send(events);
+    })
+})
+
+// Get Events created by a specific person
+router.get("/events/name/:name", function(req,res,next){
+    Event.find({creator : req.params.name} , (err, events) => {
         if (err) {
             throw err;
         }
@@ -75,6 +84,16 @@ router.delete("/events/:id", function (req, res, next) {
             throw err;
         }
         res.json(event);
+    })
+})
+
+// Edit Display Name of User
+router.put("/users/:id",function(req, res, next){
+    User.findByIdAndUpdate(req.params.id,{displayName : req.body.displayName},{new: true},(err,user)=>{
+        if(err){
+            throw err;
+        }
+        res.json(user)
     })
 })
 

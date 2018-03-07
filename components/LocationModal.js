@@ -1,4 +1,4 @@
-import { TouchableOpacity, TouchableWithoutFeedback, Modal } from 'react-native'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal, ScrollView } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
@@ -22,6 +22,8 @@ import TimePicker from './TimePicker.js'
 import locations from '../assets/areas.json'
 import axios from "axios";
 import { locale } from 'moment';
+import ModalEvent from './LocationModalEvent.js'
+import { LinearGradient } from 'expo';
 
 const url = "http://192.168.1.180:4000"
 
@@ -44,9 +46,7 @@ export default class LocationModal extends Component {
     }
 
     componentDidMount() {
-        axios.get(url + "/api/events/" + this.props.location).then(res => {
-            console.log(this.props.location)
-
+        axios.get(url + "/api/events/location/" + this.props.location).then(res => {
             this.setState({
                 events: res.data
             })
@@ -55,30 +55,10 @@ export default class LocationModal extends Component {
         })
     }
 
-    going() {
-
-    }
-
     render() {
         let events = this.state.events.map(event => {
             return (
-                <View style={styles.events} key={event.key}>
-                    <Text style={{ fontWeight: 'bold', fontSize: 20 }}>{event.name}</Text>
-                    <View style={{ flex: 1, flexDirection: 'row' }}>
-                        <View style={{
-                            width: 24,
-                            height: 24,
-                            borderRadius: 24 / 2,
-                            borderWidth: 1,
-                            backgroundColor: "green"
-                        }}>
-                            <Icon
-                                name={"check"} type="material-community"
-                            />
-                        </View>
-                        <Text style={{ fontWeight: 'bold', fontSize: 13, marginLeft: 5 }}>Go</Text>
-                    </View>
-                </View>
+                <ModalEvent event={event} key={event.key} />
             )
         })
         return (
@@ -88,6 +68,7 @@ export default class LocationModal extends Component {
                 transparent={true}
             >
                 <View style={styles.modal}>
+
                     <TouchableOpacity
                         onPress={() => {
                             this.props.closeModal();
@@ -105,9 +86,9 @@ export default class LocationModal extends Component {
                         ) : (
                                 <Title>{"Events at: "}{this.props.location}</Title>
                             )}
-                        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-around' }}>
+                        <ScrollView style={{ flex: 1, flexDirection: 'column'}}>
                             {events}
-                        </View>
+                        </ScrollView>
                         <View style={{ width: 150, marginLeft: 75 }}>
                             <Button
                                 small
@@ -119,7 +100,6 @@ export default class LocationModal extends Component {
                         </View>
                     </View>
                 </View>
-
             </Modal >
         );
     }
@@ -128,7 +108,7 @@ export default class LocationModal extends Component {
 const styles = {
     modal: {
         marginTop: 100,
-        backgroundColor: 'white',
+        backgroundColor: '#FFEFD5',
         borderRadius: 30,
         height: 600,
         marginLeft: 20,
@@ -145,10 +125,5 @@ const styles = {
         flex: 2,
         flexDirection: 'column',
         justifyContent: 'space-around'
-    },
-    events: {
-        alignItems: 'center',
-        flex: 1,
-        flexDirection: 'column'
     }
 }
