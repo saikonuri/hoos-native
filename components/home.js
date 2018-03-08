@@ -57,7 +57,9 @@ export default class Home extends Component {
 
   async componentWillMount() {
     await Font.loadAsync({
-      bungee: require("../assets/fonts/Bungee-Regular.ttf")
+      bungee: require("../assets/fonts/Bungee-Regular.ttf"),
+      acme : require("../assets/fonts/Acme-Regular.ttf"),
+      arimo: require("../assets/fonts/Arimo-Bold.ttf")
     });
     this.setState({
       fontLoaded: true
@@ -131,6 +133,10 @@ export default class Home extends Component {
     }
   }
 
+  closeAll(){
+    this.setState({ addModal: false, locationModal: false });
+  }
+
   render() {
   
     let markers;
@@ -164,10 +170,16 @@ export default class Home extends Component {
 
     let locModal;
     if (this.state.locationModal) {
-      locModal = <LocationModal visible={this.state.locationModal} location={this.state.selectedLocation} closeModal={() => this.closeLocationModal()} user={this.props.user} />
+      locModal = <LocationModal location={this.state.selectedLocation} closeModal={() => this.closeLocationModal()} user={this.props.user} />
     }
+    
+    let addModal;
+    if (this.state.addModal) {
+      addModal = <AddModal closeModal={() => this.closeModal()} user={this.props.user}  />
+    }
+
     return (
-      < View style={styles.container} >
+      <TouchableOpacity activeOpacity={1} style={styles.container}>
         <MapView
           style={styles.map}
           initialRegion={{
@@ -179,8 +191,7 @@ export default class Home extends Component {
         >
           {markers}
         </MapView>
-
-        <AddModal visible={this.state.addModal} closeModal={() => this.closeModal()} user={this.props.user} />
+        {addModal}
         {locModal}
         <View style={styles.header}>
           <View>
@@ -195,51 +206,50 @@ export default class Home extends Component {
           </View>
           <View>
             {this.state.fontLoaded ? (
-              <Text style={styles.name}>{this.props.user.displayName}</Text>
+              <Text style={styles.name}>{this.props.user.displayName.toUpperCase()}</Text>
             ) : (
                 <Text>"Welcome"</Text>
               )}
           </View>
           <View>
-            <Button
-              small
-              borderRadius={30}
-              title="Log Out"
-              backgroundColor="black"
+            <TouchableOpacity
               onPress={() => this.logOut()}
-            />
+              style={{borderWidth:1,width: 50,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#e9967a',alignItems: 'center'}}
+            >
+            <Text style={{fontSize: 10}}>Log Out </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
         <View style={styles.nav}>
           <View style={styles.tab}>
-            <Button
-              small
-              borderRadius={30}
-              title="Add Event"
-              backgroundColor="black"
+            <TouchableOpacity
+              style={{borderWidth:3,width: 120,borderRadius:20,borderColor: 'orange',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'#1e3c6d',alignItems: 'center'}}
               onPress={() => this.showModal()}
-            />
+            >
+              <Text style={{fontSize: 17, color: 'white'}}>Add Event</Text>
+            </TouchableOpacity>
           </View>
 
-          <View style={styles.tab}><Button
-            small
-            borderRadius={30}
-            title="My Events"
-            backgroundColor="black"
-          /></View>
+          <View style={styles.tab}>
+          <TouchableOpacity
+          style={{borderWidth:3,width: 120,borderRadius:20,borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
+          >
+          <Text style={{fontSize: 17}}>My Events</Text>
+          </TouchableOpacity>
+          </View>
         </View>
-      </View >
+      </TouchableOpacity >
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
   },
   map: {
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
   },
   header: {
     flex: 1,
@@ -249,12 +259,14 @@ const styles = StyleSheet.create({
     marginTop: "10%",
     right: 0,
     left: 0,
-    position: 'absolute'
+    position: 'absolute',
+    zIndex: 1
   },
   name: {
     backgroundColor: "transparent",
-    fontFamily: "bungee",
-    fontSize: 20,
+    fontFamily: "arimo",
+    fontSize: 22,
+    color: '#1e3c6d',
     marginTop: "10%"
   },
   nav: {

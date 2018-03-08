@@ -1,4 +1,4 @@
-import { TouchableOpacity, TouchableWithoutFeedback, Modal, ScrollView } from 'react-native'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal, ScrollView, Animated } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
@@ -32,13 +32,15 @@ export default class LocationModal extends Component {
         super(props);
         this.state = {
             fontLoaded: false,
-            events: []
+            events: [],
+            fadeValue : new Animated.Value(0)
         }
     }
 
     async componentWillMount() {
         await Font.loadAsync({
-            bungee: require("../assets/fonts/Bungee-Regular.ttf")
+            bungee: require("../assets/fonts/Bungee-Regular.ttf"),
+            arimo: require("../assets/fonts/Arimo-Regular.ttf")
         });
         this.setState({
             fontLoaded: true
@@ -52,23 +54,25 @@ export default class LocationModal extends Component {
             })
         }).catch(err => {
             console.log(err);
-        })
+        });
+        Animated.timing(                  
+            this.state.fadeValue,           
+            {
+              toValue: 1,                  
+              duration: 700, 
+            }
+          ).start(); 
     }
 
     render() {
+        const animStyle = {opacity: this.state.fadeValue};
         let events = this.state.events.map(event => {
             return (
                 <ModalEvent event={event} key={event.key} />
             )
         })
-        return (
-            <Modal
-                visible={this.props.visible}
-                animationType='slide'
-                transparent={true}
-            >
-                <View style={styles.modal}>
-
+        return ( 
+                <Animated.View style={[styles.modal,animStyle]}>
                     <TouchableOpacity
                         onPress={() => {
                             this.props.closeModal();
@@ -76,48 +80,41 @@ export default class LocationModal extends Component {
                         style={styles.close}
                     >
                         <Icon
-                            name={"close-box"} type="material-community"
+                            name={"close-box"} type="material-community" size={28}
                         />
                     </TouchableOpacity>
                     <View style={styles.form}>
 
                         {this.state.fontLoaded ? (
-                            <Title style={{ fontFamily: 'bungee', fontSize: 13.5 }}>{this.props.location}</Title>
+                            <Title style={{ fontFamily: 'arimo', fontSize: 15, color: '#660033' }}>{this.props.location}</Title>
                         ) : (
                                 <Title>{"Events at: "}{this.props.location}</Title>
                             )}
                         <ScrollView style={{ flex: 1, flexDirection: 'column'}}>
                             {events}
                         </ScrollView>
-                        <View style={{ width: 150, marginLeft: 75 }}>
-                            <Button
-                                small
-                                borderRadius={30}
-                                title="Cancel"
-                                backgroundColor="black"
-                                onPress={() => this.props.closeModal()}
-                            />
-                        </View>
                     </View>
-                </View>
-            </Modal >
+                </Animated.View>
         );
     }
 }
 
 const styles = {
     modal: {
+        ...StyleSheet.absoluteFillObject,
         marginTop: 100,
         backgroundColor: '#FFEFD5',
         borderRadius: 30,
         height: 600,
         marginLeft: 20,
         marginRight: 20,
+        borderWidth: 5,
+        borderColor: '#1e3c6d'
     },
     close: {
         marginTop: 8,
-        marginLeft: 8,
-        width: 20
+        marginLeft: 4,
+        width: 50
     },
     form: {
         width: 300,

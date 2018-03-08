@@ -18,7 +18,7 @@ export default class MyDatePicker extends Component {
                 style={{ width: 200 }}
                 date={date}
                 mode="datetime"
-                format={'MMMM Do YYYY, h:mm:ss a'}
+                format={'MMMM Do YYYY, h:mm a'}
                 placeholder={this.props.placeholder}
                 minDate={currDate}
                 maxDate={max}
