@@ -28,6 +28,7 @@ import fb from "../firebase.js";
 import { Dropdown } from 'react-native-material-dropdown';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+var moment = require('moment');
 
 var url = 'http://192.168.1.180:4000';
 
@@ -91,6 +92,38 @@ export default class AddModal extends Component {
         this.props.closeModal();
     }
 
+    time(hours,mins){
+        let h; 
+        let m = mins
+        let t;
+        if(hours < 12){
+            t = "AM"
+            h = hours.toString()
+        }
+        else{
+            t = "PM"
+            h = (hours - 12).toString();
+        }
+
+        if(mins < 10){
+            m = "0" + mins;
+        }
+
+        return (h + ":" + m + " " + t);
+    }
+
+    convert(date){
+        let obj = new Date(date);
+        let year = obj.getFullYear().toString();
+        let month = (obj.getMonth()+1).toString();
+        let day = (obj.getDate());
+
+        let hour = obj.getHours();
+        let mins = obj.getMinutes();
+        var ret = month+"/"+ day +"/" + year + " " + this.time(hour,mins);
+        return ret
+    }
+
     render() {
         let count = 0;
         let pickerItems = []
@@ -135,12 +168,13 @@ export default class AddModal extends Component {
                             onConfirm={(date) => {this.setState({startDate: date, openStart: false})}}
                             onCancel={() => this.setState({openStart: false})}
                             mode = {'datetime'}
+                            date = {this.state.startDate == null ? (new Date()):(this.state.startDate)}
                         />
                         {this.state.startDate == null ? (
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.state.startDate.toDateString()}</Text>
+                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.startDate)}</Text>
                             </View>
                         )}
                         
@@ -154,12 +188,13 @@ export default class AddModal extends Component {
                             onConfirm={(date) => {this.setState({endDate: date, openEnd: false});}}
                             onCancel={() => this.setState({openEnd: false})}
                             mode = {'datetime'}
+                            date = {this.state.endDate == null ? (new Date()):(this.state.endDate)}
                         />
                         {this.state.endDate == null ? (
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.state.endDate.toDateString()}</Text>
+                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.endDate)}</Text>
                             </View>
                         )}
                         <Dropdown
@@ -175,7 +210,7 @@ export default class AddModal extends Component {
                         <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center'}}>     
                         <TouchableOpacity 
                             onPress= {()=>this.setState({confirm: true})}
-                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#90EE90',alignItems: 'center',}}>
+                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#ADD8E6',alignItems: 'center',}}>
                             <Text>Confirm</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
