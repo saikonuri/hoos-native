@@ -27,6 +27,7 @@ import * as firebase from "firebase";
 import fb from "../firebase.js";
 import { Dropdown } from 'react-native-material-dropdown';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
+import DateTimePicker from 'react-native-modal-datetime-picker';
 
 var url = 'http://192.168.1.180:4000';
 
@@ -42,7 +43,9 @@ export default class AddModal extends Component {
             startDate: null,
             endDate: null,
             fadeValue : new Animated.Value(0),
-            confirm: false
+            confirm: false,
+            openStart: false,
+            openEnd: false
         }
     }
 
@@ -106,34 +109,68 @@ export default class AddModal extends Component {
                         }}
                         style={styles.close}
                     >
-                        <Icon name="arrow-left" size={20} />
+                        <Icon name="arrow-left" size={20} color={'white'}/>
                     </TouchableOpacity>
                     <View style={styles.form}>
                         <Form>
                             {this.state.fontLoaded ? (
-                                <Title style={{ fontFamily: 'arimo',color:'#660033',fontSize:20 }}>Add Event</Title>
+                                <Title style={{ fontFamily: 'arimo',color:'orange',fontSize:20 }}>Add Event</Title>
                             ) : (
                                     <Title>"Add Event"</Title>
                                 )}
                             <Item>
-                                <Input placeholder="Name of Event" placeholderTextColor="#5f9ea0" onChangeText={(text) => this.setState({ name: text })} />
+                                <Input style= {{color: '#ADD8E6'}} placeholder="Name of Event" placeholderTextColor="white"  onChangeText={(text) => this.setState({ name: text })} />
                             </Item>
                             <Item>
-                                <Input placeholder="Description" placeholderTextColor="#5f9ea0" onChangeText={(text) => this.setState({ description: text })} />
+                                <Input style= {{color: '#ADD8E6'}} placeholder="Description" placeholderTextColor="white"  onChangeText={(text) => this.setState({ description: text })} />
                             </Item>
                         </Form>
-                        <Title style={{color:'#5f9ea0', fontSize: 15}}> Select Start Date/Time </Title>
-                        <TimePicker placeholder='Select Start Date/Time' updateDate={(date) => this.setState({ startDate: date })} />
-                        <Title style={{color:'#5f9ea0', fontSize: 15}}> Select End Date/Time </Title>
-                        <TimePicker placeholder='Select End Date/Time' updateDate={(date) => this.setState({ endDate: date })} />
+                        <Title style={{ fontFamily: 'arimo',color:'white',fontSize:14 }}>Start Time</Title>
+                        <TouchableOpacity onPress={() => this.setState({openStart: true})} style={{alignItems: 'center'}}>
+                            <Icon name="clock-o" size={32} color='white'/>
+                            <Text style={{color: 'orange'}}> Select </Text>
+                        </TouchableOpacity>
+                        <DateTimePicker
+                            isVisible={this.state.openStart}
+                            onConfirm={(date) => {this.setState({startDate: date, openStart: false})}}
+                            onCancel={() => this.setState({openStart: false})}
+                            mode = {'datetime'}
+                        />
+                        {this.state.startDate == null ? (
+                            <Text/>
+                        ):(
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.state.startDate.toDateString()}</Text>
+                            </View>
+                        )}
+                        
+                        <Title style={{ fontFamily: 'arimo',color:'white',fontSize:14 }}>End Time</Title>
+                        <TouchableOpacity onPress={() => this.setState({openEnd: true})} style={{alignItems: 'center'}}>
+                            <Icon name="clock-o" size={32} color='white' />
+                            <Text style={{color: 'orange'}}> Select </Text>
+                        </TouchableOpacity>
+                        <DateTimePicker
+                            isVisible={this.state.openEnd}
+                            onConfirm={(date) => {this.setState({endDate: date, openEnd: false});}}
+                            onCancel={() => this.setState({openEnd: false})}
+                            mode = {'datetime'}
+                        />
+                        {this.state.endDate == null ? (
+                            <Text/>
+                        ):(
+                            <View style={{alignItems: 'center'}}>
+                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.state.endDate.toDateString()}</Text>
+                            </View>
+                        )}
                         <Dropdown
                             label="Select a location"
                             onChangeText={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}
                             data = {pickerItems}
                             pickerStyle = {{width: 280, borderWidth: 1.5}}
-                            baseColor='#5f9ea0'
+                            baseColor='white'
                             lineWidth= {1.5}
-                            selectedItemColor = '#5f9ea0'
+                            selectedItemColor = 'orange'
+                            textColor = '#ADD8E6'
                             />   
                         <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center'}}>     
                         <TouchableOpacity 
@@ -170,13 +207,13 @@ export default class AddModal extends Component {
 const styles = {
     modal: {
         marginTop: 100,
-        backgroundColor: '#FFEFD5',
+        backgroundColor: '#1e3c6d',
         borderRadius: 30,
         height: 600,
         marginLeft: 20,
         marginRight: 20,
         borderWidth: 5,
-        borderColor: '#1e3c6d'
+        borderColor: 'orange'
     },
     close: {
         marginTop: 8,
