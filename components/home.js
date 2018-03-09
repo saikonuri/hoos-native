@@ -123,7 +123,7 @@ export default class Home extends Component {
     }
     else if (ratio > 0.33) {
       return (
-        "#f9e140"
+        "#FFD700"
       )
     }
     else {
@@ -147,7 +147,6 @@ export default class Home extends Component {
           coordinate={marker.coordinates}
           title={marker.name}
           key={marker.id}
-
         >
           <View style={{
             width: 24,
@@ -159,9 +158,13 @@ export default class Home extends Component {
             {this.returnIcon(marker.name)}
           </View>
           <MapView.Callout width={250}>
-            <Text style={{ fontWeight: 'bold' }}>{marker.name}</Text>
-            <Text>Number of Events: {this.getCount(marker.name)}</Text>
-            <Text style={{ color: "#3b79dd" }} onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>Click Here For Current Games</Text>
+            <TouchableOpacity onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>
+            <Text style={{ fontWeight: 'bold', color: color }}>{marker.name}</Text>
+            <View style={{flex: 1, flexDirection: 'row'}}>
+            <Text>Number of Events: </Text>
+            <Text style={{color: color}}>{this.getCount(marker.name)}</Text>
+            </View>
+            </TouchableOpacity>
           </MapView.Callout>
         </MapView.Marker>
 

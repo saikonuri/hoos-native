@@ -25,10 +25,36 @@ export default class ModalEvent extends Component{
         });
     }
 
-    convertDate(date){
-        let ret = moment(date).isValid();
-        console.log(ret);
-        return "Date"
+    time(hours,mins){
+        let h; 
+        let m = mins
+        let t;
+        if(hours < 12){
+            t = "AM"
+            h = hours.toString()
+        }
+        else{
+            t = "PM"
+            h = (hours - 12).toString();
+        }
+
+        if(mins < 10){
+            m = "0" + mins;
+        }
+
+        return (h + ":" + m + " " + t);
+    }
+
+    convert(date){
+        let obj = new Date(date);
+        let year = obj.getFullYear().toString();
+        let month = (obj.getMonth()+1).toString();
+        let day = (obj.getDate());
+
+        let hour = obj.getHours();
+        let mins = obj.getMinutes();
+        var ret = month+"/"+ day +"/" + year + " " + this.time(hour,mins);
+        return ret
     }
 
     render(){
@@ -36,11 +62,11 @@ export default class ModalEvent extends Component{
         return(
             <View style={styles.box}>
                     <View style={styles.title}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 15, color:'#660033'}}>{event.name}</Text>
-                        <Text> {event.startDate} - {event.endDate} </Text>
+                        <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
+                        <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
                     </View>
                     <View style={styles.selection}>
-                    <TouchableOpacity style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#90EE90'}}>
+                    <TouchableOpacity style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}>
                         <Text>Going</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}>
@@ -56,7 +82,7 @@ const styles = {
     box:{
         borderWidth: 1,
         borderRadius: 20,
-        borderColor: 'black',
+        borderColor: '#ADD8E6',
         marginTop: 7
     },
     title : {

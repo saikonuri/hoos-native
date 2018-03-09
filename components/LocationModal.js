@@ -80,13 +80,13 @@ export default class LocationModal extends Component {
                         style={styles.close}
                     >
                         <Icon
-                            name={"close-box"} type="material-community" size={28}
+                            name={"close-box"} type="material-community" size={28} color={'white'}
                         />
                     </TouchableOpacity>
                     <View style={styles.form}>
 
                         {this.state.fontLoaded ? (
-                            <Title style={{ fontFamily: 'arimo', fontSize: 15, color: '#660033' }}>{this.props.location}</Title>
+                            <Title style={{ fontFamily: 'arimo', fontSize: 15, color: 'white' }}>{this.props.location}</Title>
                         ) : (
                                 <Title>{"Events at: "}{this.props.location}</Title>
                             )}
@@ -103,13 +103,13 @@ const styles = {
     modal: {
         ...StyleSheet.absoluteFillObject,
         marginTop: 100,
-        backgroundColor: '#FFEFD5',
+        backgroundColor: '#1e3c6d',
         borderRadius: 30,
         height: 600,
         marginLeft: 20,
         marginRight: 20,
         borderWidth: 5,
-        borderColor: '#1e3c6d'
+        borderColor: 'orange'
     },
     close: {
         marginTop: 8,
