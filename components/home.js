@@ -17,6 +17,7 @@ import axios from "axios";
 import BottomNavigation, { Tab } from 'react-native-material-bottom-navigation'
 import AddModal from './AddEventModal.js'
 import LocationModal from './LocationModal.js'
+import MyEventsModal from './MyEventsModal.js'
 import mapStyle from '../assets/mapstyle.json'
 import locations from '../assets/areas.json'
 import fb from '../firebase.js'
@@ -39,7 +40,8 @@ export default class Home extends Component {
       addModal: false,
       numEvents: 0,
       locationModal: false,
-      selectedLocation: ""
+      selectedLocation: "",
+      myEventsModal: false
     };
   }
 
@@ -146,6 +148,18 @@ export default class Home extends Component {
     this.setState({ addModal: false, locationModal: false });
   }
 
+  showMyEvents(){
+    this.setState({
+      myEventsModal: true
+    })
+  }
+
+  closeMyEventsModal(){
+    this.setState({
+      myEventsModal: false
+    })
+  }
+
   render() {
   
     let markers;
@@ -165,7 +179,7 @@ export default class Home extends Component {
             borderColor: color[0],
             backgroundColor: color[1]
           }}>
-            {/* {this.returnIcon(marker.name)} */}
+            
           </View>
           <MapView.Callout width={250}>
             <TouchableOpacity onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>
@@ -191,10 +205,23 @@ export default class Home extends Component {
       addModal = <AddModal closeModal={() => this.closeModal()} user={this.props.user} addEvent = {(event) => this.addEvent(event)}/>
     }
 
+    let myEventsModal;
+    if(this.state.myEventsModal){
+      myEventsModal = <MyEventsModal events={this.state.events} closeModal={() => this.closeMyEventsModal()} user={this.props.user}/>
+    }
+
     if(this.state.locationModal){
       return(
         <View>
           {locModal}
+        </View>
+      )
+    }
+
+    if(this.state.myEventsModal){
+      return(
+        <View>
+          {myEventsModal}
         </View>
       )
     }
@@ -254,6 +281,7 @@ export default class Home extends Component {
           <View style={styles.tab}>
           <TouchableOpacity
           style={{borderWidth:3,width: 120, borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
+          onPress = {() => this.showMyEvents()}
           >
           <Text style={{fontSize: 17}}>My Events</Text>
           </TouchableOpacity>
