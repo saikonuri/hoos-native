@@ -78,7 +78,8 @@ export default class AddModal extends Component {
             startDate: this.state.startDate,
             endDate: this.state.endDate,
             location: this.state.selectedLocation,
-            creator: this.props.user.email
+            creator: this.props.user.email,
+            going: [this.props.user.displayName]
         }
         axios({
             method: 'post',
@@ -88,8 +89,8 @@ export default class AddModal extends Component {
             .then((res) => {})
             .catch((error) => {
                 console.log(error);
-            });
-        this.props.closeModal();
+        });
+        this.props.addEvent(body);
     }
 
     time(hours,mins){
@@ -244,7 +245,7 @@ const styles = {
         marginTop: 100,
         backgroundColor: '#1e3c6d',
         borderRadius: 30,
-        height: 600,
+        height: '70%',
         marginLeft: 20,
         marginRight: 20,
         borderWidth: 5,

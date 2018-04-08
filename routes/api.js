@@ -42,7 +42,8 @@ router.post("/events", function (req, res) {
         creator: req.body.creator,
         startDate: req.body.startDate,
         endDate: req.body.endDate,
-        description: req.body.description
+        description: req.body.description,
+        going: req.body.going
     });
     event.key = event._id;
     event.save(err => {
@@ -60,13 +61,13 @@ router.put("/events/:id", function (req, res) {
             throw err;
         }
 
-        event.name = req.body.name;
-        event.description = req.body.description;
-        event.location = req.body.location;
-        event.startDate = req.body.startDate;
-        event.endDate = req.body.endDate;
-        event.going = req.body.going;
-        event.notGoing = req.body.notGoing;
+        event.name = req.body.event.name;
+        event.description = req.body.event.description;
+        event.location = req.body.event.location;
+        event.startDate = req.body.event.startDate;
+        event.endDate = req.body.event.endDate;
+        event.going = req.body.event.going;
+        event.notGoing = req.body.event.notGoing;
 
         event.save((err, event) => {
             if (err) {

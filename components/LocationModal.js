@@ -1,4 +1,4 @@
-import { TouchableOpacity, TouchableWithoutFeedback, Modal, ScrollView, Animated } from 'react-native'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal, FlatList, Animated } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
@@ -52,6 +52,7 @@ export default class LocationModal extends Component {
             this.setState({
                 events: res.data
             })
+            console.log(res.data)
         }).catch(err => {
             console.log(err);
         });
@@ -68,11 +69,11 @@ export default class LocationModal extends Component {
         const animStyle = {opacity: this.state.fadeValue};
         let events = this.state.events.map(event => {
             return (
-                <ModalEvent event={event} key={event.key} />
+                <ModalEvent event={event} key={event._id} user={this.props.user}/>
             )
         })
         return ( 
-                <Animated.View style={[styles.modal,animStyle]}>
+                <Animated.ScrollView style={[styles.modal,animStyle]}>
                     <TouchableOpacity
                         onPress={() => {
                             this.props.closeModal();
@@ -84,43 +85,32 @@ export default class LocationModal extends Component {
                         />
                     </TouchableOpacity>
                     <View style={styles.form}>
-
                         {this.state.fontLoaded ? (
-                            <Title style={{ fontFamily: 'arimo', fontSize: 15, color: 'white' }}>{this.props.location}</Title>
+                            <Title style={{ fontFamily: 'arimo', fontSize: 18, color: 'white' }}>{this.props.location}</Title>
                         ) : (
                                 <Title>{"Events at: "}{this.props.location}</Title>
                             )}
-                        <ScrollView style={{ flex: 1, flexDirection: 'column'}}>
-                            {events}
-                        </ScrollView>
+                        {events}
                     </View>
-                </Animated.View>
+                </Animated.ScrollView>
         );
     }
 }
 
 const styles = {
     modal: {
-        ...StyleSheet.absoluteFillObject,
-        marginTop: 100,
         backgroundColor: '#1e3c6d',
-        borderRadius: 30,
-        height: 600,
-        marginLeft: 20,
-        marginRight: 20,
-        borderWidth: 5,
-        borderColor: 'orange'
+        height: '100%'
     },
     close: {
-        marginTop: 8,
+        marginTop: 40,
         marginLeft: 4,
         width: 50
     },
     form: {
-        width: 300,
-        marginLeft: '6%',
-        flex: 2,
+        flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        alignItems:'center'
     }
 }

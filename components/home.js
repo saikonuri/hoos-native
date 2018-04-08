@@ -87,6 +87,15 @@ export default class Home extends Component {
     this.props.logOut();
   }
 
+  addEvent(event){
+    let arr = this.state.events;
+    arr.push(event)
+    this.setState({
+      addModal: false,
+      events: arr
+    });
+  }
+
   getCount(name) {
     let count = 0;
     this.state.events.map(event => {
@@ -119,16 +128,16 @@ export default class Home extends Component {
   getColor(name) {
     let ratio = this.getCount(name) / (this.state.numEvents);
     if (ratio > 0.67) {
-      return "#28b21e"
+      return ["#065e02","#08c101"]
     }
     else if (ratio > 0.33) {
       return (
-        "#FFD700"
+        ["#968504","#efde5d"]
       )
     }
     else {
       return (
-        "#f4563a"
+        ["#800000",'#FF6347']
       )
     }
   }
@@ -152,17 +161,18 @@ export default class Home extends Component {
             width: 24,
             height: 24,
             borderRadius: 24 / 2,
-            borderWidth: 1,
-            backgroundColor: color
+            borderWidth: 2,
+            borderColor: color[0],
+            backgroundColor: color[1]
           }}>
-            {this.returnIcon(marker.name)}
+            {/* {this.returnIcon(marker.name)} */}
           </View>
           <MapView.Callout width={250}>
             <TouchableOpacity onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>
-            <Text style={{ fontWeight: 'bold', color: color }}>{marker.name}</Text>
+            <Text style={{ fontWeight: 'bold', color: color[1] }}>{marker.name}</Text>
             <View style={{flex: 1, flexDirection: 'row'}}>
             <Text>Number of Events: </Text>
-            <Text style={{color: color}}>{this.getCount(marker.name)}</Text>
+            <Text style={{color: color[1]}}>{this.getCount(marker.name)}</Text>
             </View>
             </TouchableOpacity>
           </MapView.Callout>
@@ -178,9 +188,17 @@ export default class Home extends Component {
     
     let addModal;
     if (this.state.addModal) {
-      addModal = <AddModal closeModal={() => this.closeModal()} user={this.props.user}  />
+      addModal = <AddModal closeModal={() => this.closeModal()} user={this.props.user} addEvent = {(event) => this.addEvent(event)}/>
     }
 
+    if(this.state.locationModal){
+      return(
+        <View>
+          {locModal}
+        </View>
+      )
+    }
+    else {
     return (
       <TouchableOpacity activeOpacity={1} style={styles.container}>
         <MapView
@@ -195,7 +213,6 @@ export default class Home extends Component {
           {markers}
         </MapView>
         {addModal}
-        {locModal}
         <View style={styles.header}>
           <View>
             <Avatar
@@ -217,7 +234,7 @@ export default class Home extends Component {
           <View>
             <TouchableOpacity
               onPress={() => this.logOut()}
-              style={{borderWidth:1,width: 50,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#e9967a',alignItems: 'center'}}
+              style={{borderWidth:1,width: 50,borderColor: 'black',paddingVertical: 6, backgroundColor:'#e9967a',alignItems: 'center'}}
             >
             <Text style={{fontSize: 10}}>Log Out </Text>
             </TouchableOpacity>
@@ -227,16 +244,16 @@ export default class Home extends Component {
         <View style={styles.nav}>
           <View style={styles.tab}>
             <TouchableOpacity
-              style={{borderWidth:3,width: 120,borderRadius:20,borderColor: 'orange',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'#1e3c6d',alignItems: 'center'}}
+              style={{borderWidth:3,width: 120,borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
               onPress={() => this.showModal()}
             >
-              <Text style={{fontSize: 17, color: 'white'}}>Add Event</Text>
+              <Text style={{fontSize: 17}}>Add Event</Text>
             </TouchableOpacity>
           </View>
 
           <View style={styles.tab}>
           <TouchableOpacity
-          style={{borderWidth:3,width: 120,borderRadius:20,borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
+          style={{borderWidth:3,width: 120, borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
           >
           <Text style={{fontSize: 17}}>My Events</Text>
           </TouchableOpacity>
@@ -244,6 +261,7 @@ export default class Home extends Component {
         </View>
       </TouchableOpacity >
     );
+  }
   }
 }
 
