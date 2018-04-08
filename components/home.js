@@ -108,25 +108,6 @@ export default class Home extends Component {
     return count;
   }
 
-  returnIcon(name) {
-    let ratio = this.getCount(name) / (this.state.numEvents);
-    if (ratio > 0.67) {
-      return (
-        <Icon name={icons[2]} type="material-community" />
-      )
-    }
-    else if (ratio > 0.33) {
-      return (
-        <Icon name={icons[1]} type="material-community" />
-      )
-    }
-    else {
-      return (
-        <Icon name={icons[0]} type="material-community" />
-      )
-    }
-  }
-
   getColor(name) {
     let ratio = this.getCount(name) / (this.state.numEvents);
     if (ratio > 0.67) {

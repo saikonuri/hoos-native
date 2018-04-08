@@ -40,7 +40,7 @@ export default class EventModal extends Component{
 
         if(this.props.showGoing){
             return(
-                    <View style={{flex: 1, flexDirection: 'column', width: 200}}>
+                    <View style={{flex: 1, flexDirection: 'column', width: 270, height:80}}>
                         <Title style={{marginTop: 5,color:'white'}}> Going </Title>
                         <ScrollView style={{marginTop: 2}}>
                             {people}
@@ -51,7 +51,7 @@ export default class EventModal extends Component{
 
         else{
             return(
-                <View style={{flex: 1, flexDirection: 'column', width: 200}}>
+                <View style={{flex: 1, flexDirection: 'column', width: 270, height: 80}}>
                     <Title style={{color:'white'}}> Description </Title>
                     <ScrollView style={{marginLeft: 15, marginTop: 10, height: 30}}>  
                         <Text style={{color:'white'}}>{this.props.description}</Text>

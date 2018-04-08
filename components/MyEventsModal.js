@@ -59,13 +59,16 @@ export default class MyEventsModal extends Component {
 
     render() {
         const animStyle = {opacity: this.state.fadeValue};
-        let events = this.state.events.map(event => {
+        let myEvents = this.state.events.map(event => {
             if(event.going.includes(this.props.user.displayName)){
+                editable = (event.creator == this.props.user.email) 
                 return (
-                    <ModalEvent event={event} key={event._id} user={this.props.user}/>
+                    <ModalEvent event={event} key={event._id} user={this.props.user} editable = {editable}/>
                 )
             }
         })
+
+
         return ( 
                 <Animated.ScrollView style={[styles.modal,animStyle]}>
                     <TouchableOpacity
@@ -84,7 +87,7 @@ export default class MyEventsModal extends Component {
                         ) : (
                                 <Title>My Events</Title>
                             )}
-                        {events}
+                        {myEvents}
                     </View>
                 </Animated.ScrollView>
         );

@@ -111,6 +111,14 @@ export default class ModalEvent extends Component{
         });
     }
 
+    editEvent(){
+        console.log("editing")
+    }
+
+    deleteEvent(){
+        console.log("deleting")
+    }
+
     render(){
         let event = this.props.event;
         let info;
@@ -121,35 +129,70 @@ export default class ModalEvent extends Component{
                     showDescription = {this.state.showDescription}
                     />
         }
-        return(
+
+        if(!this.props.editable){
+            return(
+                <View style={styles.box}>
+                        <View style={styles.title}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
+                            <TouchableOpacity onPress={()=>this.setState({showDescription:!(this.state.showDescription),showGoing:false})}>
+                                <Icon name={"information"} type="material-community" size={17} color={'white'}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.setState({showGoing: !(this.state.showGoing),showDescription: false})}>
+                                <Icon name={"account-multiple"} type="material-community" size={17} color={'white'}/>
+                            </TouchableOpacity>
+                            <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
+                        </View>
+                        <View style={styles.selection}>
+                        {!this.state.going ? (<TouchableOpacity 
+                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
+                            onPress= {()=>this.updateStatus()}
+                            >
+                            <Text>Go</Text>
+                        </TouchableOpacity>):(<TouchableOpacity 
+                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
+                            onPress= {()=>this.updateStatus()}
+                            >
+                            <Text>Don't Go</Text>
+                        </TouchableOpacity>)}
+                        {info}
+                        </View>
+                        
+                </View>
+            );
+        }
+
+        else{
+            return(
             <View style={styles.box}>
-                    <View style={styles.title}>
-                        <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
-                        <TouchableOpacity onPress={()=>this.setState({showDescription:!(this.state.showDescription),showGoing:false})}>
-                            <Icon name={"information"} type="material-community" size={17} color={'white'}/>
+                        <View style={styles.title}>
+                            <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
+                            <TouchableOpacity onPress={()=>this.setState({showDescription:!(this.state.showDescription),showGoing:false})}>
+                                <Icon name={"information"} type="material-community" size={17} color={'white'}/>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={()=>this.setState({showGoing: !(this.state.showGoing),showDescription: false})}>
+                                <Icon name={"account-multiple"} type="material-community" size={17} color={'white'}/>
+                            </TouchableOpacity>
+                            <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
+                        </View>
+                        <View style={styles.selection}>
+                        <TouchableOpacity 
+                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
+                            onPress= {()=>this.editEvent()}
+                            >
+                            <Text>Edit</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={()=>this.setState({showGoing: !(this.state.showGoing),showDescription: false})}>
-                            <Icon name={"account-multiple"} type="material-community" size={17} color={'white'}/>
+                        <TouchableOpacity 
+                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
+                            onPress= {()=>this.deleteEvent()}
+                            >
+                            <Text>Delete</Text>
                         </TouchableOpacity>
-                        <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
-                    </View>
-                    <View style={styles.selection}>
-                    {!this.state.going ? (<TouchableOpacity 
-                        style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
-                        onPress= {()=>this.updateStatus()}
-                        >
-                        <Text>Go</Text>
-                    </TouchableOpacity>):(<TouchableOpacity 
-                        style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
-                        onPress= {()=>this.updateStatus()}
-                        >
-                        <Text>Don't Go</Text>
-                    </TouchableOpacity>)}
-                    {info}
-                    </View>
-                    
-             </View>
-        );
+                        {info}
+                        </View>
+                </View>
+            );
+        }
     }
 };
 
