@@ -41,19 +41,32 @@ export default class Home extends Component {
       numEvents: 0,
       locationModal: false,
       selectedLocation: "",
-      myEventsModal: false
+      myEventsModal: false,
+      region:
+        {
+          latitude: 38.0329,
+          longitude: -78.5135,
+          latitudeDelta: 0.0922,
+          longitudeDelta: 0.0421,
+        }
+      
     };
   }
 
+  // Show Add Events Modal
   showModal() {
     this.setState({ addModal: true });
   }
 
+  // Close Add Events Modal
   closeModal() {
+    this.fetchEvents();
     this.setState({ addModal: false });
   }
 
+  // Close LocationModal
   closeLocationModal() {
+    this.fetchEvents();
     this.setState({ locationModal: false });
   }
 
@@ -89,6 +102,7 @@ export default class Home extends Component {
     this.props.logOut();
   }
 
+  // Adds Event on the front end (the map)
   addEvent(event){
     let arr = this.state.events;
     arr.push(event)
@@ -98,6 +112,7 @@ export default class Home extends Component {
     });
   }
 
+  // Gets number of events at location
   getCount(name) {
     let count = 0;
     this.state.events.map(event => {
@@ -108,6 +123,7 @@ export default class Home extends Component {
     return count;
   }
 
+  // Gets color scheme for the marker callout
   getColor(name) {
     let ratio = this.getCount(name) / (this.state.numEvents);
     if (ratio > 0.67) {
@@ -125,24 +141,31 @@ export default class Home extends Component {
     }
   }
 
+  // Closes all Modals
   closeAll(){
     this.setState({ addModal: false, locationModal: false });
   }
 
+  // Open the My Events Modal
   showMyEvents(){
     this.setState({
       myEventsModal: true
     })
   }
 
+  // Close the My Events Modal
   closeMyEventsModal(){
+    this.fetchEvents();
     this.setState({
       myEventsModal: false
     })
   }
 
+  changeRegion(region){
+    this.setState({region:region})
+  }
+
   render() {
-  
     let markers;
     markers = locations.map(marker => {
       let color = this.getColor(marker.name);
@@ -211,12 +234,8 @@ export default class Home extends Component {
       <TouchableOpacity activeOpacity={1} style={styles.container}>
         <MapView
           style={styles.map}
-          initialRegion={{
-            latitude: 38.0329,
-            longitude: -78.5135,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
+          initialRegion={this.state.region}
+          onRegionChangeComplete = {(region) => this.changeRegion(region)}
         >
           {markers}
         </MapView>

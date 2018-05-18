@@ -56,25 +56,12 @@ router.post("/events", function (req, res) {
 
 //Edit an existing Event
 router.put("/events/:id", function (req, res) {
-    Event.findOne({ _id: req.params.id }, (err, event) => {
+    console.log(req.body)
+    Event.findByIdAndUpdate(req.params.id, req.body, (err,event)=>{
         if (err) {
             throw err;
         }
-
-        event.name = req.body.event.name;
-        event.description = req.body.event.description;
-        event.location = req.body.event.location;
-        event.startDate = req.body.event.startDate;
-        event.endDate = req.body.event.endDate;
-        event.going = req.body.event.going;
-        event.notGoing = req.body.event.notGoing;
-
-        event.save((err, event) => {
-            if (err) {
-                throw err;
-            }
-            res.json(event);
-        })
+        res.json(event);
     })
 })
 

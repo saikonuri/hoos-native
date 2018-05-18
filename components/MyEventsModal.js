@@ -22,7 +22,7 @@ import TimePicker from './TimePicker.js'
 import axios from "axios";
 import { locale } from 'moment';
 import { LinearGradient } from 'expo';
-import ModalEvent from './LocationModalEvent.js'
+import ModalEvent from './ModalEvent.js'
 
 const url = "http://192.168.1.180:4000"
 

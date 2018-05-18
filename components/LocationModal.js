@@ -22,7 +22,7 @@ import TimePicker from './TimePicker.js'
 import locations from '../assets/areas.json'
 import axios from "axios";
 import { locale } from 'moment';
-import ModalEvent from './LocationModalEvent.js'
+import ModalEvent from './ModalEvent.js'
 import { LinearGradient } from 'expo';
 
 const url = "http://192.168.1.180:4000"
@@ -52,7 +52,6 @@ export default class LocationModal extends Component {
             this.setState({
                 events: res.data
             })
-            console.log(res.data)
         }).catch(err => {
             console.log(err);
         });
@@ -69,7 +68,7 @@ export default class LocationModal extends Component {
         const animStyle = {opacity: this.state.fadeValue};
         let events = this.state.events.map(event => {
             return (
-                <ModalEvent event={event} key={event._id} user={this.props.user}/>
+                <ModalEvent event={event} key={event._id} user={this.props.user} editable={event.creator == (this.props.user.email)} />
             )
         })
         return ( 

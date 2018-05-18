@@ -4,7 +4,8 @@ import axios from "axios";
 import { Header, Avatar, Button, Icon } from "react-native-elements";
 import { Font } from "expo";
 import PopupDialog from 'react-native-popup-dialog';
-import EventModal from './EventInfo.js'
+import EventInfo from './EventInfo.js'
+import EditModal from './EditEventModal.js'
 var moment = require('moment');
 
 const url = "http://192.168.1.180:4000";
@@ -18,7 +19,8 @@ export default class ModalEvent extends Component{
             created: false,
             going: false,
             showDescription: false,
-            showGoing: false
+            showGoing: false,
+            edit: false
         }
     }
 
@@ -52,10 +54,16 @@ export default class ModalEvent extends Component{
         if(hours < 12){
             t = "AM"
             h = hours.toString()
+            if(h == 0){
+                h = 12
+            }
         }
         else{
             t = "PM"
             h = (hours - 12).toString();
+            if(h == 0){
+                h = 12;
+            }
         }
 
         if(mins < 10){
@@ -105,14 +113,24 @@ export default class ModalEvent extends Component{
             url: url + '/api/events/'+event._id,
             data: body
         })
-            .then((res) => {})
+            .then((res) => {
+                this.props.updateModal(res.data)
+            })
             .catch((error) => {
                 console.log(error);
         });
     }
 
-    editEvent(){
-        console.log("editing")
+    editEvent(body){
+        this.setState({edit: false, event: body})
+    }
+
+    openEdit(){
+        this.setState({edit: true})
+    }
+
+    closeEditModal(){
+        this.setState({edit: false})
     }
 
     deleteEvent(){
@@ -123,7 +141,7 @@ export default class ModalEvent extends Component{
         let event = this.props.event;
         let info;
         if (this.state.showDescription || this.state.showGoing){
-           info =  <EventModal 
+           info =  <EventInfo 
                     going = {this.state.event.going} description = {this.state.event.description}
                     showGoing = {this.state.showGoing}
                     showDescription = {this.state.showDescription}
@@ -163,6 +181,7 @@ export default class ModalEvent extends Component{
         }
 
         else{
+            if(!this.state.edit){
             return(
             <View style={styles.box}>
                         <View style={styles.title}>
@@ -178,7 +197,7 @@ export default class ModalEvent extends Component{
                         <View style={styles.selection}>
                         <TouchableOpacity 
                             style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
-                            onPress= {()=>this.editEvent()}
+                            onPress= {()=>this.openEdit()}
                             >
                             <Text>Edit</Text>
                         </TouchableOpacity>
@@ -192,6 +211,12 @@ export default class ModalEvent extends Component{
                         </View>
                 </View>
             );
+        }
+        else{
+            return(
+                <EditModal event = {this.state.event} editEvent = {(body) => this.editEvent(body)} closeModal = {() => this.closeEditModal()}/>
+            )
+        }
         }
     }
 };

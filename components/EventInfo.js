@@ -21,7 +21,7 @@ var moment = require('moment');
 
 const url = "http://192.168.1.180:4000";
 
-export default class EventModal extends Component{
+export default class EventInfo extends Component{
     constructor(props){
         super(props);
        
