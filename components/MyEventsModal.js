@@ -57,13 +57,23 @@ export default class MyEventsModal extends Component {
           ).start(); 
     }
 
+    updateEvents(event){
+        let events = []
+        this.state.events.map(e => {
+            if (e._id !== event._id){
+                events.push(e)
+            }
+        })
+        this.setState({events: events})
+    }
+
     render() {
         const animStyle = {opacity: this.state.fadeValue};
         let myEvents = this.state.events.map(event => {
             if(event.going.includes(this.props.user.displayName)){
                 editable = (event.creator == this.props.user.email) 
                 return (
-                    <ModalEvent event={event} key={event._id} user={this.props.user} editable = {editable}/>
+                    <ModalEvent event={event} key={event._id} user={this.props.user} editable = {editable} updateEvents={(event) => this.updateEvents(event)}/>
                 )
             }
         })

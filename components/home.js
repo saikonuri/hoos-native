@@ -201,7 +201,7 @@ export default class Home extends Component {
 
     let locModal;
     if (this.state.locationModal) {
-      locModal = <LocationModal location={this.state.selectedLocation} closeModal={() => this.closeLocationModal()} user={this.props.user} />
+      locModal = <LocationModal location={this.state.selectedLocation} closeModal={() => this.closeLocationModal()} user={this.props.user}/>
     }
     
     let addModal;

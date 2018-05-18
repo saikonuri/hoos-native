@@ -7,6 +7,7 @@ import PopupDialog from 'react-native-popup-dialog';
 import EventInfo from './EventInfo.js'
 import EditModal from './EditEventModal.js'
 var moment = require('moment');
+import { ConfirmDialog } from 'react-native-simple-dialogs';
 
 const url = "http://192.168.1.180:4000";
 
@@ -20,7 +21,8 @@ export default class ModalEvent extends Component{
             going: false,
             showDescription: false,
             showGoing: false,
-            edit: false
+            edit: false,
+            confirmDelete: false
         }
     }
 
@@ -134,7 +136,14 @@ export default class ModalEvent extends Component{
     }
 
     deleteEvent(){
-        console.log("deleting")
+        event = null
+        axios.delete(url + '/api/events/'+this.state.event._id).then((res) => {
+            event = res.data
+            this.setState({confirmDelete: false})
+            this.props.updateEvents(event)
+        }).catch((error) =>{
+            console.log(error)
+        })
     }
 
     render(){
@@ -203,10 +212,24 @@ export default class ModalEvent extends Component{
                         </TouchableOpacity>
                         <TouchableOpacity 
                             style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
-                            onPress= {()=>this.deleteEvent()}
+                            onPress= {()=>this.setState({confirmDelete:true})}
                             >
                             <Text>Delete</Text>
                         </TouchableOpacity>
+                        <ConfirmDialog
+                            title="Delete Event?"
+                            message="Are you sure about deleting this event?"
+                            visible={this.state.confirmDelete}
+                            onTouchOutside={() => this.setState({confirmDelete: false})}
+                            positiveButton={{
+                                title: "YES",
+                                onPress: () => this.deleteEvent()
+                            }}
+                            negativeButton={{
+                                title: "NO",
+                                onPress: () => this.setState({confirmDelete: false}) 
+                            }}
+                        />
                         {info}
                         </View>
                 </View>
