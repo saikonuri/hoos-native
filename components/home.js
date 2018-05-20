@@ -22,9 +22,10 @@ import mapStyle from '../assets/mapstyle.json'
 import locations from '../assets/areas.json'
 import fb from '../firebase.js'
 import * as firebase from "firebase";
-import socketIOClient from 'socket.io-client'
 
+import io from 'socket.io-client';
 var url = 'http://192.168.1.180:4000'
+var server = io(url)
 
 // The three trends that we use to show how popular a location is on the map
 const icons = ["trending-down", "trending-neutral", "trending-up"];
@@ -49,7 +50,6 @@ export default class Home extends Component {
           latitudeDelta: 0.0922,
           longitudeDelta: 0.0421,
         }
-      
     };
   }
 
@@ -83,6 +83,13 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.fetchEvents();
+    server.on('update',(event)=>{
+      var arr = this.state.events;
+      arr.push(event);
+      this.setState({
+        events: arr
+      })
+    })
   }
 
   fetchEvents() {
@@ -104,12 +111,16 @@ export default class Home extends Component {
 
   // Adds Event on the front end (the map)
   addEvent(event){
-    let arr = this.state.events;
-    arr.push(event)
+    var arr = this.state.events;
+    arr.push(event);
+    var numEvents = this.state.numEvents;
+    numEvents+=1;
     this.setState({
       addModal: false,
-      events: arr
+      events: arr,
+      numEvents : numEvents
     });
+    server.emit('newEvent',event);
   }
 
   // Gets number of events at location
@@ -129,7 +140,7 @@ export default class Home extends Component {
     if (ratio > 0.67) {
       return ["#065e02","#08c101"]
     }
-    else if (ratio > 0.33) {
+    else if (ratio > 0.1) {
       return (
         ["#968504","#efde5d"]
       )
@@ -248,7 +259,6 @@ export default class Home extends Component {
               source={{
                 uri: this.props.user.photoURL
               }}
-              onPress={() => this.test()}
             />
           </View>
           <View>

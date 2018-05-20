@@ -1,5 +1,4 @@
 var express = require('express');
-var socket = require('socket.io');
 var mongoose = require('mongoose');
 var bodyParser = require("body-parser");
 const routes = require("./routes/api");
@@ -46,13 +45,24 @@ mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 
 // Where our server is running
-var server = app.listen(port, function () {
-    console.log(`api running on port ${port}`);
+var server = require('http').Server(app);
+server.listen(4000);
+var io = require('socket.io').listen(server);
+io.on('connection',(client) => {
+    console.log("Connected to Clients");
+    client.on('newEvent',(event) => {
+        console.log(event)
+        client.broadcast.emit('update',event)
+    })
+})
+
+// Make io accessible to our router
+app.use(function(req,res,next){
+    req.io = io;
+    next();
 });
 
-// Telling express to use routes in api.js
-var router = express.Router();
-app.use("/api", routes);
+//app.use("/api", routes);
 
 // Updating User: If new user logs in, save (insert/update) them into the User collection
 //                If old user logs in, just send a response with the user already in database  
@@ -77,12 +87,89 @@ app.put("/user", function (req, res, next) {
             })
         }
     })
+});
+
+// Get All Events
+app.get("/api/events", function (req, res, next) {
+    Event.find({}, (err, events) => {
+        if (err) {
+            throw err;
+        }
+        res.send(events);
+    });
+});
+
+// Get Events at a Certain Location
+app.get("/api/events/location/:location", function (req, res, next) {
+    // console.log(req.params)
+    Event.find({location : req.params.location} , (err, events) => {
+        if (err) {
+            throw err;
+        }
+        res.send(events);
+    })
 })
 
-// Socket.io implementation
-// var io = socket(server);
-// io.sockets.on('connection', function (socket) {
-//     socket.on('message', function (data) {
-//         socket.broadcast.emit('message', data + " sent a message.")
-//     });
-// });
+// Get Events created by a specific person
+app.get("/api/events/name/:name", function(req,res,next){
+    Event.find({creator : req.params.name} , (err, events) => {
+        if (err) {
+            throw err;
+        }
+        res.send(events);
+    })
+})
+
+// Post a new Event
+app.post("/api/events", function (req, res) {
+    var event = new Event({
+        name: req.body.name,
+        location: req.body.location,
+        creator: req.body.creator,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        description: req.body.description,
+        going: req.body.going
+    });
+    event.key = event._id;
+    event.save(err => {
+        if (err) {
+            throw err;
+        }
+        res.json(event);
+    })
+    req.io.on('connection', function (socket) {
+        console.log('client connected');
+    });
+})
+
+//Edit an existing Event
+app.put("/api/events/:id", function (req, res) {
+    console.log(req.body)
+    Event.findByIdAndUpdate(req.params.id, req.body, (err,event)=>{
+        if (err) {
+            throw err;
+        }
+        res.json(event);
+    })
+})
+
+// Delete an existing Event
+app.delete("/api/events/:id", function (req, res, next) {
+    Event.findByIdAndRemove(req.params.id, (err, event) => {
+        if (err) {
+            throw err;
+        }
+        res.json(event);
+    })
+})
+
+// Edit Display Name of User
+app.put("/api/users/:id",function(req, res, next){
+    User.findByIdAndUpdate(req.params.id,{displayName : req.body.displayName},{new: true},(err,user)=>{
+        if(err){
+            throw err;
+        }
+        res.json(user)
+    })
+})

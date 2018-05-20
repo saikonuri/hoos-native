@@ -79,7 +79,7 @@ export default class LocationModal extends Component {
         const animStyle = {opacity: this.state.fadeValue};
         let events = this.state.events.map(event => {
             return (
-                <ModalEvent event={event} key={event._id} user={this.props.user} editable={event.creator == (this.props.user.email)} updateEvents={(event)=> this.updateEvents(event)}/>
+                <ModalEvent event={event} key={event._id} user={this.props.user} />
             )
         })
         return ( 

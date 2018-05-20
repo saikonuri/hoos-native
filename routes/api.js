@@ -52,6 +52,9 @@ router.post("/events", function (req, res) {
         }
         res.json(event);
     })
+    req.io.on('connection', function (socket) {
+        console.log('client connected');
+    });
 })
 
 //Edit an existing Event

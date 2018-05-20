@@ -86,11 +86,12 @@ export default class AddModal extends Component {
             url: url + '/api/events',
             data: body
         })
-            .then((res) => {})
+            .then((res) => {
+                this.props.addEvent(res.data);
+            })
             .catch((error) => {
                 console.log(error);
         });
-        this.props.addEvent(body);
     }
 
     time(hours,mins){
