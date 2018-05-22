@@ -22,11 +22,9 @@ import mapStyle from '../assets/mapstyle.json'
 import locations from '../assets/areas.json'
 import fb from '../firebase.js'
 import * as firebase from "firebase";
+import server from './socket.js';
 
-import io from 'socket.io-client';
 var url = 'http://192.168.1.180:4000'
-var server = io(url)
-
 // The three trends that we use to show how popular a location is on the map
 const icons = ["trending-down", "trending-neutral", "trending-up"];
 
@@ -83,12 +81,27 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.fetchEvents();
-    server.on('update',(event)=>{
+
+    server.on('newEvent',(event)=>{
       var arr = this.state.events;
       arr.push(event);
       this.setState({
         events: arr
       })
+    });
+
+    server.on('editEvent', (event)=>{
+      if(event.going.includes(this.props.user.displayName)){
+        alert(event.name + ' ' + 'has been edited!');
+        this.fetchEvents();
+      }
+    })
+
+    server.on('deleteEvent', (event) => {
+      if(event.going.includes(this.props.user.displayName)){
+        alert(event.name + ' ' + 'has been deleted!');
+        this.fetchEvents();
+      }
     })
   }
 

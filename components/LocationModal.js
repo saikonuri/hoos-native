@@ -65,7 +65,6 @@ export default class LocationModal extends Component {
     }
 
     updateEvents(event){
-        console.log(event)
         let events = []
         this.state.events.map(e => {
             if (e._id !== event._id){

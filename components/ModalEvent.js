@@ -8,8 +8,10 @@ import EventInfo from './EventInfo.js'
 import EditModal from './EditEventModal.js'
 var moment = require('moment');
 import { ConfirmDialog } from 'react-native-simple-dialogs';
+import server from './socket.js'
 
-const url = "http://192.168.1.180:4000";
+var url = 'http://192.168.1.180:4000'
+
 
 export default class ModalEvent extends Component{
     constructor(props){
@@ -125,6 +127,7 @@ export default class ModalEvent extends Component{
 
     editEvent(body){
         this.setState({edit: false, event: body})
+        server.emit('editEvent', body);
     }
 
     openEdit(){
@@ -140,6 +143,7 @@ export default class ModalEvent extends Component{
         axios.delete(url + '/api/events/'+this.state.event._id).then((res) => {
             event = res.data
             this.setState({confirmDelete: false})
+            server.emit('deleteEvent', event);
             this.props.updateEvents(event)
         }).catch((error) =>{
             console.log(error)

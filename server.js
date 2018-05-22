@@ -51,16 +51,15 @@ var io = require('socket.io').listen(server);
 io.on('connection',(client) => {
     console.log("Connected to Clients");
     client.on('newEvent',(event) => {
-        console.log(event)
-        client.broadcast.emit('update',event)
+        client.broadcast.emit('newEvent',event)
+    })
+    client.on('editEvent',(event) => {
+        client.broadcast.emit('editEvent',event)
+    })
+    client.on('deleteEvent',(event) =>{
+        client.broadcast.emit('deleteEvent',event)
     })
 })
-
-// Make io accessible to our router
-app.use(function(req,res,next){
-    req.io = io;
-    next();
-});
 
 //app.use("/api", routes);
 
@@ -138,9 +137,6 @@ app.post("/api/events", function (req, res) {
         }
         res.json(event);
     })
-    req.io.on('connection', function (socket) {
-        console.log('client connected');
-    });
 })
 
 //Edit an existing Event
