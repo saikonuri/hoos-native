@@ -39,6 +39,24 @@ export default class ModalEvent extends Component{
         this.getGoing();
     }
 
+    componentDidMount(){
+        server.on('updateGoing',(event) => {
+            if(event._id == this.state.event._id){
+                this.setState({
+                    event: event
+                })
+            }
+        })
+
+        server.on('editEventInModal',(event) => {
+            if(event._id == this.state.event._id){
+                this.setState({
+                    event: event
+                })
+            }
+        })
+    }
+
     getGoing(){
         if(this.state.event.going.includes(this.props.user.displayName)){
             this.setState({going: true})
@@ -112,13 +130,14 @@ export default class ModalEvent extends Component{
              event: event
          }
 
+         server.emit('updateGoing',body.event)
+
          axios({
             method: 'put',
             url: url + '/api/events/'+event._id,
             data: body
         })
             .then((res) => {
-                this.props.updateModal(res.data)
             })
             .catch((error) => {
                 console.log(error);
@@ -126,8 +145,8 @@ export default class ModalEvent extends Component{
     }
 
     editEvent(body){
-        this.setState({edit: false, event: body})
         server.emit('editEvent', body);
+        this.setState({edit: false, event: body})
     }
 
     openEdit(){
@@ -151,7 +170,7 @@ export default class ModalEvent extends Component{
     }
 
     render(){
-        let event = this.props.event;
+        let event = this.state.event;
         let info;
         if (this.state.showDescription || this.state.showGoing){
            info =  <EventInfo 

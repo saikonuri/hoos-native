@@ -85,23 +85,26 @@ export default class Home extends Component {
     server.on('newEvent',(event)=>{
       var arr = this.state.events;
       arr.push(event);
+      var numEvents = this.state.numEvents;
+      numEvents+=1;
       this.setState({
-        events: arr
+        events: arr,
+        numEvents : numEvents
       })
     });
 
-    server.on('editEvent', (event)=>{
+    server.on('editEvent', (event) => {
       if(event.going.includes(this.props.user.displayName)){
         alert(event.name + ' ' + 'has been edited!');
-        this.fetchEvents();
       }
+      this.fetchEvents();
     })
 
     server.on('deleteEvent', (event) => {
       if(event.going.includes(this.props.user.displayName)){
         alert(event.name + ' ' + 'has been deleted!');
-        this.fetchEvents();
       }
+      this.fetchEvents();
     })
   }
 

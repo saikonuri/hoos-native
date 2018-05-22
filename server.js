@@ -51,13 +51,19 @@ var io = require('socket.io').listen(server);
 io.on('connection',(client) => {
     console.log("Connected to Clients");
     client.on('newEvent',(event) => {
-        client.broadcast.emit('newEvent',event)
+        client.broadcast.emit('newEvent',event);
+        client.broadcast.emit('newEventInModal',event);
     })
     client.on('editEvent',(event) => {
-        client.broadcast.emit('editEvent',event)
+        client.broadcast.emit('editEvent',event);
+        client.broadcast.emit('editEventInModal',event);
     })
     client.on('deleteEvent',(event) =>{
-        client.broadcast.emit('deleteEvent',event)
+        client.broadcast.emit('deleteEvent',event);
+        client.broadcast.emit('deleteEventInModal',event);
+    })
+    client.on('updateGoing',(event) => {
+        client.broadcast.emit('updateGoing', event)
     })
 })
 
@@ -141,7 +147,6 @@ app.post("/api/events", function (req, res) {
 
 //Edit an existing Event
 app.put("/api/events/:id", function (req, res) {
-    console.log(req.body)
     Event.findByIdAndUpdate(req.params.id, req.body, (err,event)=>{
         if (err) {
             throw err;

@@ -18,13 +18,13 @@ import {
     Input
 } from "native-base";
 var moment = require('moment');
+import server from './socket.js'
 
 const url = "http://192.168.1.180:4000";
 
 export default class EventInfo extends Component{
     constructor(props){
         super(props);
-       
     }
 
     render(){

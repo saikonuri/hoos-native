@@ -64,16 +64,6 @@ export default class LocationModal extends Component {
           ).start(); 
     }
 
-    updateEvents(event){
-        let events = []
-        this.state.events.map(e => {
-            if (e._id !== event._id){
-                events.push(e)
-            }
-        })
-        this.setState({events: events})
-    }
-
     render() {
         const animStyle = {opacity: this.state.fadeValue};
         let events = this.state.events.map(event => {
