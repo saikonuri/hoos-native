@@ -249,10 +249,18 @@ export default class Home extends Component {
       )
     }
 
-    if(this.state.myEventsModal){
+    else if(this.state.myEventsModal){
       return(
         <View>
           {myEventsModal}
+        </View>
+      )
+    }
+
+    else if (this.state.addModal){
+      return(
+        <View>
+          {addModal}
         </View>
       )
     }
@@ -266,9 +274,8 @@ export default class Home extends Component {
         >
           {markers}
         </MapView>
-        {addModal}
         <View style={styles.header}>
-          <View>
+          
             <Avatar
               medium
               rounded
@@ -276,7 +283,7 @@ export default class Home extends Component {
                 uri: this.props.user.photoURL
               }}
             />
-          </View>
+          
           <View>
             {this.state.fontLoaded ? (
               <Text style={styles.name}>{this.props.user.displayName.toUpperCase()}</Text>
@@ -287,7 +294,7 @@ export default class Home extends Component {
           <View>
             <TouchableOpacity
               onPress={() => this.logOut()}
-              style={{borderWidth:1,width: 50,borderColor: 'black',paddingVertical: 6, backgroundColor:'#e9967a',alignItems: 'center'}}
+              style={{alignItems: 'center'}}
             >
             <Text style={{fontSize: 10}}>Log Out </Text>
             </TouchableOpacity>
@@ -330,7 +337,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center",
+   
     marginTop: "10%",
     right: 0,
     left: 0,

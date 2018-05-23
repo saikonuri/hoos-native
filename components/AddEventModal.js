@@ -1,4 +1,4 @@
-import { TouchableOpacity, TouchableWithoutFeedback, Modal, Animated } from 'react-native'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal, Animated, TextInput } from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
@@ -12,7 +12,8 @@ import {
     Body,
     Form,
     Item,
-    Input
+    Input,
+    Label
 } from "native-base";
 import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
 import { Header, Avatar, Button } from "react-native-elements";
@@ -28,6 +29,7 @@ import fb from "../firebase.js";
 import { Dropdown } from 'react-native-material-dropdown';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { Kaede } from 'react-native-textinput-effects';
 var moment = require('moment');
 
 var url = 'http://192.168.1.180:4000';
@@ -71,6 +73,27 @@ export default class AddModal extends Component {
           ).start();
     }
 
+    confirmInputs(){
+        let body = this.state
+        if (body.name == ''){
+            alert('Name field cannot be empty')
+        }
+        else if (body.startDate == null){
+            alert('Please Select a Start Time')
+        }
+        else if (body.endDate == null){
+            alert("Please Select an end time")
+        }
+        else if (body.selectedLocation == null){
+            alert("Please Select a Location")
+        }
+        else{
+            this.setState({
+                confirm: true
+            })
+        }
+    }
+
     createEvent() {
         let body = {
             name: this.state.name,
@@ -81,6 +104,7 @@ export default class AddModal extends Component {
             creator: this.props.user.email,
             going: [this.props.user.displayName]
         }
+        
         axios({
             method: 'post',
             url: url + '/api/events',
@@ -92,6 +116,7 @@ export default class AddModal extends Component {
             .catch((error) => {
                 console.log(error);
         });
+        
     }
 
     time(hours,mins){
@@ -138,31 +163,38 @@ export default class AddModal extends Component {
 
         return (
                 <Animated.View style={[styles.modal,animStyle]}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.closeModal();
-                        }}
-                        style={styles.close}
-                    >
-                        <Icon name="arrow-left" size={20} color={'white'}/>
-                    </TouchableOpacity>
+                    <Header
+                        outerContainerStyles = {{height: '10%'}}
+                        backgroundColor = '#f8990f'
+                        leftComponent= {<TouchableOpacity
+                            onPress={() => {
+                                this.props.closeModal();
+                            }}
+                           
+                        >
+                            <Icon name="arrow-left" size={20} color={'white'}/>
+                        </TouchableOpacity>}
+                        centerComponent = {this.state.fontLoaded ? (
+                            <Title style={{ fontFamily: 'arimo',fontSize:20, color: 'white'}}>Add Event</Title>
+                        ) : (
+                                <Title>"Add Event"</Title>
+                            )}
+                    /> 
                     <View style={styles.form}>
                         <Form>
-                            {this.state.fontLoaded ? (
-                                <Title style={{ fontFamily: 'arimo',color:'orange',fontSize:20 }}>Add Event</Title>
-                            ) : (
-                                    <Title>"Add Event"</Title>
-                                )}
-                            <Item>
-                                <Input style= {{color: '#ADD8E6'}} placeholder="Name of Event" placeholderTextColor="white"  onChangeText={(text) => this.setState({ name: text })} />
+                            <Item floatingLabel>
+                                <Label>Name</Label>
+                                <Input style={{color: '#4370ba'}} onChangeText={(text) => this.setState({ name: text })} />
                             </Item>
-                            <Item>
-                                <Input style= {{color: '#ADD8E6'}} placeholder="Description" placeholderTextColor="white"  onChangeText={(text) => this.setState({ description: text })} />
+                            <Item floatingLabel>
+                                <Label>Description</Label>
+                                <Input style={{color: '#4370ba'}} onChangeText={(text) => this.setState({ description: text })} />
                             </Item>
                         </Form>
-                        <Title style={{ fontFamily: 'arimo',color:'white',fontSize:14 }}>Start Time</Title>
-                        <TouchableOpacity onPress={() => this.setState({openStart: true})} style={{alignItems: 'center'}}>
-                            <Icon name="clock-o" size={32} color='white'/>
+                    </View>    
+                        <Title style={{color:'black',fontSize:13, alignContent: 'center', marginTop: '10%'}}>Start</Title>
+                        <TouchableOpacity onPress={() => this.setState({openStart: true})} style={{alignItems: 'center',alignContent: 'center'}}>
+                            <Icon name="clock-o" size={32} color='black'/>
                             <Text style={{color: 'orange'}}> Select </Text>
                         </TouchableOpacity>
                         <DateTimePicker
@@ -176,13 +208,13 @@ export default class AddModal extends Component {
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.startDate)}</Text>
+                                <Text style={{color: '#4370ba', fontSize: 18}}>{this.convert(this.state.startDate)}</Text>
                             </View>
                         )}
                         
-                        <Title style={{ fontFamily: 'arimo',color:'white',fontSize:14 }}>End Time</Title>
+                        <Title style={{ color:'black',fontSize:13,marginTop: '10%' }}>End</Title>
                         <TouchableOpacity onPress={() => this.setState({openEnd: true})} style={{alignItems: 'center'}}>
-                            <Icon name="clock-o" size={32} color='white' />
+                            <Icon name="clock-o" size={32} color='black' />
                             <Text style={{color: 'orange'}}> Select </Text>
                         </TouchableOpacity>
                         <DateTimePicker
@@ -196,32 +228,33 @@ export default class AddModal extends Component {
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.endDate)}</Text>
+                                <Text style={{color: '#4370ba', fontSize: 18}}>{this.convert(this.state.endDate)}</Text>
                             </View>
                         )}
                         <Dropdown
                             label="Select a location"
                             onChangeText={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}
                             data = {pickerItems}
-                            pickerStyle = {{width: 280, borderWidth: 1.5}}
-                            baseColor='white'
-                            lineWidth= {1.5}
-                            selectedItemColor = 'orange'
-                            textColor = '#ADD8E6'
+                            pickerStyle = {{width: 380, borderWidth: 1.5}}
+                            baseColor='black'
+                            lineWidth= {1}
+                            selectedItemColor = '#4370ba'
+                            textColor = '#4370ba'
+                            inputContainerStyle={{marginRight: '5%',marginLeft: '5%',marginTop: '3%'}}
                             />   
                         <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center'}}>     
                         <TouchableOpacity 
-                            onPress= {()=>this.setState({confirm: true})}
-                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#ADD8E6',alignItems: 'center',}}>
-                            <Text>Confirm</Text>
+                            onPress= {()=>this.confirmInputs()}
+                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#4370ba',alignItems: 'center', marginTop: '10%'}}>
+                            <Text style={{color: 'white'}}>Confirm</Text>
                         </TouchableOpacity>
                         <TouchableOpacity 
                         onPress= {()=>this.props.closeModal()}
-                        style={{marginTop: 10,borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#FFA07A', alignItems: 'center'}}>
-                            <Text>Cancel</Text>
+                        style={{marginTop: 10,borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#f44336', alignItems: 'center'}}>
+                            <Text style={{color: 'white'}}>Cancel</Text>
                         </TouchableOpacity>
                         </View>
-                    </View>
+                    
                     <ConfirmDialog
                         title="Confirm Event"
                         message="Are you sure about creating this event?"
@@ -243,26 +276,12 @@ export default class AddModal extends Component {
 
 const styles = {
     modal: {
-        marginTop: 100,
-        backgroundColor: '#1e3c6d',
-        borderRadius: 30,
-        height: '70%',
-        marginLeft: 20,
-        marginRight: 20,
-        borderWidth: 5,
-        borderColor: 'orange'
-    },
-    close: {
-        marginTop: 8,
-        marginLeft: 8,
-        width: 20
+        backgroundColor: 'white',
+        height: '100%'
     },
     form: {
-        width: 300,
-        marginLeft: '6%',
-        flex: 2,
-        flexDirection: 'column',
-        justifyContent: 'space-around'
+        width: '90%',
+        marginTop: '5%',
     },
     button:{
         borderWidth:1,
