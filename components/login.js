@@ -7,7 +7,6 @@ import {
 } from "react-native";
 import { LinearGradient } from 'expo';
 import { Avatar, Button, SocialIcon } from "react-native-elements";
-
 import {
   Container,
   Header,
@@ -21,10 +20,26 @@ import {
   Icon,
   Text
 } from "native-base";
+import { Font } from "expo";
 
 export default class Login extends Component {
   constructor(props) {
     super(props);
+    this.state={
+      fontLoaded: false
+    }
+  }
+
+  async componentWillMount() {
+    await Font.loadAsync({
+      bungee: require("../assets/fonts/Bungee-Regular.ttf"),
+      acme : require("../assets/fonts/Acme-Regular.ttf"),
+      arimo: require("../assets/fonts/Arimo-Bold.ttf"),
+      raleway: require("../assets/fonts/Raleway-Black.ttf")
+    });
+    this.setState({
+      fontLoaded: true
+    });
   }
 
   googleLogIn() {
@@ -36,38 +51,29 @@ export default class Login extends Component {
   }
   render() {
     return (
-      <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
-          style={{
-            position: 'absolute',
-            left: 0,
-            right: 0,
-            top: 0,
-            height: '100%'
-          }}
-       >
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-        <Image
-          style={{ width: 325, height: 325, marginBottom: "5%" }}
-          source={require("../assets/hoosLogo.png")}
-        />
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: 'white' }}>
+      {this.state.fontLoaded ? (
+              <Text style={{fontFamily: "raleway",fontSize: 41,color: '#E57200'}}>Hoos Active</Text>
+            ) : (
+                <Text style={{fontSize: 41,color: '#E57200'}}>"Hoos Active"</Text>
+              )}
         <Button
           small
-          borderRadius={30}
-          title="UVA Sign-In"
-          backgroundColor="#f65314"
+          buttonStyle={{
+            backgroundColor: "white",
+            width: 100,
+            height: 40,
+            borderColor: "#232D4B",
+            borderWidth: 2,
+            borderRadius: 5,
+            marginTop: '60%'
+          }}
+          title="Log In"
+          fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+          textStyle = {{color: '#232D4B'}}
           onPress={() => this.googleLogIn()}
         />
-        {/* <Button
-          small
-          borderRadius={30}
-          title="Facebook Sign In"
-          backgroundColor="#3b5998"
-          onPress={() => this.facebookLogIn()}
-          style={{ marginTop: "2%" }}
-        /> */}
       </View>
-      </LinearGradient>
     );
   }
 }
