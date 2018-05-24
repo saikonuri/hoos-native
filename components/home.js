@@ -72,7 +72,8 @@ export default class Home extends Component {
     await Font.loadAsync({
       bungee: require("../assets/fonts/Bungee-Regular.ttf"),
       acme : require("../assets/fonts/Acme-Regular.ttf"),
-      arimo: require("../assets/fonts/Arimo-Bold.ttf")
+      arimo: require("../assets/fonts/Arimo-Bold.ttf"),
+      raleway: require("../assets/fonts/Raleway-Black.ttf")
     });
     this.setState({
       fontLoaded: true
@@ -274,51 +275,68 @@ export default class Home extends Component {
         >
           {markers}
         </MapView>
-        <View style={styles.header}>
-          
-            <Avatar
-              medium
-              rounded
-              source={{
-                uri: this.props.user.photoURL
-              }}
-            />
-          
-          <View>
+        <Header
+          outerContainerStyles = {{height: '10.5%'}}
+          backgroundColor = 'transparent'
+          leftComponent = {<View>
             {this.state.fontLoaded ? (
               <Text style={styles.name}>{this.props.user.displayName.toUpperCase()}</Text>
             ) : (
                 <Text>"Welcome"</Text>
               )}
-          </View>
-          <View>
-            <TouchableOpacity
+          </View>}
+          rightComponent = {
+            <Button
+              title= "Log Out"
               onPress={() => this.logOut()}
-              style={{alignItems: 'center'}}
-            >
-            <Text style={{fontSize: 10}}>Log Out </Text>
-            </TouchableOpacity>
-          </View>
-        </View>
+              buttonStyle={{
+                backgroundColor: "transparent",
+                width: 80,
+                height: 20,
+                borderColor: "#232D4B",
+                borderWidth: 2,
+                borderRadius: 5,
+                right: -2
+              }}
+              fontSize= {12}
+              fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+              textStyle={{color: '#232D4B'}}
+            />
+          }
+        />
 
         <View style={styles.nav}>
-          <View style={styles.tab}>
-            <TouchableOpacity
-              style={{borderWidth:3,width: 120,borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
-              onPress={() => this.showModal()}
-            >
-              <Text style={{fontSize: 17}}>Add Event</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.tab}>
-          <TouchableOpacity
-          style={{borderWidth:3,width: 120, borderColor: '#1e3c6d',paddingVertical: 9,paddingHorizontal: 15, backgroundColor:'orange',alignItems: 'center'}}
+          <Button
+            onPress={() => this.showModal()}
+            title = "Add Event"
+            buttonStyle={{
+              backgroundColor: "#232D4B",
+              width: 100,
+              height: 40,
+              borderColor: "transparent",
+              borderWidth: 0,
+              borderRadius: 5,
+              right: -2
+            }}
+            fontSize= {14}
+            fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+          />
+          
+          <Button
           onPress = {() => this.showMyEvents()}
-          >
-          <Text style={{fontSize: 17}}>My Events</Text>
-          </TouchableOpacity>
-          </View>
+          title = "My Events"
+          buttonStyle={{
+            backgroundColor: "#232D4B",
+            width: 100,
+            height: 40,
+            borderColor: "transparent",
+            borderWidth: 0,
+            borderRadius: 5,
+            right: -2
+          }}
+          fontSize= {14}
+          fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+          />
         </View>
       </TouchableOpacity >
     );
@@ -345,10 +363,9 @@ const styles = StyleSheet.create({
     zIndex: 1
   },
   name: {
-    backgroundColor: "transparent",
-    fontFamily: "arimo",
+    fontFamily: "raleway",
     fontSize: 22,
-    color: '#1e3c6d',
+    color: '#E57200',
     marginTop: "10%"
   },
   nav: {
