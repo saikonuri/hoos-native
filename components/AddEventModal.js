@@ -1,5 +1,4 @@
 import { TouchableOpacity, TouchableWithoutFeedback, Modal, Animated, TextInput } from 'react-native'
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
     Container,
@@ -19,17 +18,13 @@ import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
 import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
-import TimePicker from './TimePicker.js'
 import locations from '../assets/areas.json'
 import axios from "axios";
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
-import * as firebase from "firebase";
-import fb from "../firebase.js";
 import { Dropdown } from 'react-native-material-dropdown';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import { Kaede } from 'react-native-textinput-effects';
 var moment = require('moment');
 
 var url = 'http://192.168.1.180:4000';
@@ -44,11 +39,9 @@ export default class AddModal extends Component {
             name: '',
             description: '',
             startDate: null,
-            endDate: null,
             fadeValue : new Animated.Value(0),
             confirm: false,
             openStart: false,
-            openEnd: false
         }
     }
 
@@ -82,9 +75,6 @@ export default class AddModal extends Component {
         else if (body.startDate == null){
             alert('Please Select a Start Time')
         }
-        else if (body.endDate == null){
-            alert("Please Select an end time")
-        }
         else if (body.selectedLocation == null){
             alert("Please Select a Location")
         }
@@ -100,7 +90,6 @@ export default class AddModal extends Component {
             name: this.state.name,
             description: this.state.description,
             startDate: this.state.startDate,
-            endDate: this.state.endDate,
             location: this.state.selectedLocation,
             creator: this.props.user.email,
             going: [this.props.user.displayName]
@@ -152,20 +141,6 @@ export default class AddModal extends Component {
         return ret
     }
 
-    getEndDate(){
-        if(this.state.endDate == null){
-            if(this.state.startDate == null){
-                return new Date()
-            }
-            else{
-                return this.state.startDate
-            }
-        }
-        else{
-            return this.state.endDate
-        }
-    }
-
     render() {
         let count = 0;
         let pickerItems = []
@@ -215,22 +190,12 @@ export default class AddModal extends Component {
                         <DateTimePicker
                             isVisible={this.state.openStart}
                             onConfirm={(date) => {
-                                if(this.state.endDate){
-                                    if (this.state.endDate.getTime() < date.getTime()){
-                                        this.setState({startDate: date, openStart: false, endDate: null})
-                                    }
-                                    else{
-                                        this.setState({startDate: date, openStart: false})
-                                    }
-                                }
-                                else{
-                                    this.setState({startDate: date, openStart: false})
-                                }
+                                this.setState({startDate: date, openStart: false})
                             }}
                             onCancel={() => this.setState({openStart: false})}
                             mode = {'datetime'}
                             minimumDate = {new Date()}
-                            maximumDate = {new Date(new Date().getTime()+(2*24*60*60*1000))}
+                            maximumDate = {new Date(new Date().getTime()+(24*60*60*1000))}
                             date = {this.state.startDate == null ? (new Date()):(this.state.startDate)}
                         />
                         {this.state.startDate == null ? (
@@ -241,36 +206,6 @@ export default class AddModal extends Component {
                             </View>
                         )}
                         
-                        <Title style={{ color:'black',fontSize:13,marginTop: '10%' }}>End</Title>
-                        <TouchableOpacity onPress={() => {
-                            if(this.state.startDate){
-                                this.setState({openEnd: true})
-                                }
-                            else{
-                                alert("Please Choose a Start Time First!")
-                            }
-                            }
-                            } 
-                            style={{alignItems: 'center'}}>
-                            <Icon name="clock-o" size={32} color='black' />
-                            <Text style={{color: 'orange'}}> Select </Text>
-                        </TouchableOpacity>
-                        <DateTimePicker
-                            isVisible={this.state.openEnd}
-                            onConfirm={(date) => {this.setState({endDate: date, openEnd: false});}}
-                            onCancel={() => this.setState({openEnd: false})}
-                            mode = {'datetime'}
-                            minimumDate = {this.state.startDate == null ? (new Date()):(new Date(this.state.startDate.getTime()+(1*60*60*1000)))}
-                            maximumDate = {this.state.startDate == null ? (new Date(new Date().getTime()+(24*60*60*1000))):(new Date(this.state.startDate.getTime()+(24*60*60*1000)))}
-                            date = {this.getEndDate()}
-                        />
-                        {this.state.endDate == null ? (
-                            <Text/>
-                        ):(
-                            <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#232D4B', fontSize: 18}}>{this.convert(this.state.endDate)}</Text>
-                            </View>
-                        )}
                         <Dropdown
                             label="Select a location"
                             onChangeText={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}

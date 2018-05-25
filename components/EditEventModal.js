@@ -18,7 +18,6 @@ import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
 import { Header, Avatar, Button } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
-import TimePicker from './TimePicker.js'
 import locations from '../assets/areas.json'
 import axios from "axios";
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -42,11 +41,9 @@ export default class EditModal extends Component {
             name: this.props.event.name,
             description: this.props.event.description,
             startDate: this.props.event.startDate,
-            endDate: this.props.event.endDate,
             fadeValue : new Animated.Value(0),
             confirm: false,
-            openStart: false,
-            openEnd: false
+            openStart: false
         }
     }
 
@@ -59,6 +56,24 @@ export default class EditModal extends Component {
         this.setState({
             fontLoaded: true
         });
+    }
+
+    confirmInputs(){
+        let body = this.state
+        if (body.name == ''){
+            alert('Name field cannot be empty')
+        }
+        else if (body.startDate == null){
+            alert('Please Select a Start Time')
+        }
+        else if (body.selectedLocation == null){
+            alert("Please Select a Location")
+        }
+        else{
+            this.setState({
+                confirm: true
+            })
+        }
     }
 
     componentDidMount(){
@@ -76,7 +91,6 @@ export default class EditModal extends Component {
         event.name = this.state.name;
         event.description = this.state.description;
         event.startDate = this.state.startDate;
-        event.endDate = this.state.endDate;
         event.location = this.state.selectedLocation;
 
         axios({
@@ -176,26 +190,6 @@ export default class EditModal extends Component {
                                 <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.startDate)}</Text>
                             </View>
                         )}
-                        
-                        <Title style={{ fontFamily: 'arimo',color:'white',fontSize:14 }}>End Time</Title>
-                        <TouchableOpacity onPress={() => this.setState({openEnd: true})} style={{alignItems: 'center'}}>
-                            <Icon name="clock-o" size={32} color='white' />
-                            <Text style={{color: 'orange'}}> Select </Text>
-                        </TouchableOpacity>
-                        <DateTimePicker
-                            isVisible={this.state.openEnd}
-                            onConfirm={(date) => {this.setState({endDate: date, openEnd: false});}}
-                            onCancel={() => this.setState({openEnd: false})}
-                            mode = {'datetime'}
-                            date = {new Date(this.state.endDate)}
-                        />
-                        {this.state.endDate == null ? (
-                            <Text/>
-                        ):(
-                            <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#ADD8E6', fontSize: 17}}>{this.convert(this.state.endDate)}</Text>
-                            </View>
-                        )}
                         <Dropdown
                             label="Select a location"
                             onChangeText={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}
@@ -208,16 +202,36 @@ export default class EditModal extends Component {
                             value = {this.state.selectedLocation}
                             />   
                         <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center'}}>     
-                        <TouchableOpacity 
-                            onPress= {()=>this.setState({confirm: true})}
-                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#ADD8E6',alignItems: 'center',}}>
-                            <Text>Confirm</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
+                        <Button
+                            onPress= {()=>this.confirmInputs()}
+                            buttonStyle={{
+                                backgroundColor: "#232D4B",
+                                width: 100,
+                                height: 40,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5
+                              }}
+                            title = "Confirm"
+                            fontSize= {14}
+                            fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+                        />
+                        <Button 
                         onPress= {()=>this.props.closeModal()}
-                        style={{marginTop: 10,borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#FFA07A', alignItems: 'center'}}>
-                            <Text>Cancel</Text>
-                        </TouchableOpacity>
+                        buttonStyle={{
+                            backgroundColor: "transparent",
+                            width: 100,
+                            height: 40,
+                            borderColor: "#232D4B",
+                            borderWidth: 2,
+                            borderRadius: 5,
+                            marginTop: 18
+                          }}
+                        title = "Cancel"
+                        fontSize= {14}
+                        fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+                        textStyle = {{color: '#232D4B'}}
+                        />
                         </View>
                     </View>
                     <ConfirmDialog
@@ -241,26 +255,17 @@ export default class EditModal extends Component {
 
 const styles = {
     modal: {
-        marginTop: 100,
-        backgroundColor: '#1e3c6d',
-        borderRadius: 30,
-        height: '70%',
-        marginLeft: 20,
-        marginRight: 20,
-        borderWidth: 5,
-        borderColor: 'orange'
-    },
-    close: {
-        marginTop: 8,
-        marginLeft: 8,
-        width: 20
+        backgroundColor: 'white',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0, 
+        bottom: 0,
+        height: '500%'
     },
     form: {
-        width: 300,
-        marginLeft: '6%',
-        flex: 2,
-        flexDirection: 'column',
-        justifyContent: 'space-around'
+        width: '90%',
+        marginTop: '5%',
     },
     button:{
         borderWidth:1,

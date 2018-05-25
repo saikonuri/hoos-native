@@ -8,10 +8,8 @@ var EventSchema = new Schema({
     location: String,
     description: String,
     startDate: Date,
-    endDate: Date,
     creator: String,
     going: [String],
-    notGoing: [String],
     key: String
 });
 

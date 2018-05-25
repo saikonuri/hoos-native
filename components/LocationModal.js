@@ -18,7 +18,6 @@ import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
 import { Header, Avatar, Button, Icon } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
-import TimePicker from './TimePicker.js'
 import locations from '../assets/areas.json'
 import axios from "axios";
 import { locale } from 'moment';

@@ -132,7 +132,6 @@ app.post("/api/events", function (req, res) {
         location: req.body.location,
         creator: req.body.creator,
         startDate: req.body.startDate,
-        endDate: req.body.endDate,
         description: req.body.description,
         going: req.body.going
     });

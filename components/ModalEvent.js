@@ -259,7 +259,7 @@ export default class ModalEvent extends Component{
             );
         }
         else{
-            return(
+            return (
                 <EditModal event = {this.state.event} editEvent = {(body) => this.editEvent(body)} closeModal = {() => this.closeEditModal()}/>
             )
         }
