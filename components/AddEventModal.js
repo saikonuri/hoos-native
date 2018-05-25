@@ -40,7 +40,7 @@ export default class AddModal extends Component {
         super(props);
         this.state = {
             fontLoaded: false,
-            selectedLocation: 'Aquatics and Fitness Center',
+            selectedLocation: null,
             name: '',
             description: '',
             startDate: null,
@@ -56,7 +56,8 @@ export default class AddModal extends Component {
         await Font.loadAsync({
             bungee: require("../assets/fonts/Bungee-Regular.ttf"),
             acme: require("../assets/fonts/Acme-Regular.ttf"),
-            arimo: require("../assets/fonts/Arimo-Regular.ttf")
+            arimo: require("../assets/fonts/Arimo-Regular.ttf"),
+            raleway: require("../assets/fonts/Raleway-Black.ttf")
         });
         this.setState({
             fontLoaded: true
@@ -151,6 +152,20 @@ export default class AddModal extends Component {
         return ret
     }
 
+    getEndDate(){
+        if(this.state.endDate == null){
+            if(this.state.startDate == null){
+                return new Date()
+            }
+            else{
+                return this.state.startDate
+            }
+        }
+        else{
+            return this.state.endDate
+        }
+    }
+
     render() {
         let count = 0;
         let pickerItems = []
@@ -165,7 +180,7 @@ export default class AddModal extends Component {
                 <Animated.View style={[styles.modal,animStyle]}>
                     <Header
                         outerContainerStyles = {{height: '10%'}}
-                        backgroundColor = '#f8990f'
+                        backgroundColor = '#E57200'
                         leftComponent= {<TouchableOpacity
                             onPress={() => {
                                 this.props.closeModal();
@@ -175,7 +190,7 @@ export default class AddModal extends Component {
                             <Icon name="arrow-left" size={20} color={'white'}/>
                         </TouchableOpacity>}
                         centerComponent = {this.state.fontLoaded ? (
-                            <Title style={{ fontFamily: 'arimo',fontSize:20, color: 'white'}}>Add Event</Title>
+                            <Title style={{ fontFamily: 'raleway',fontSize:20, color: 'white'}}>Add Event</Title>
                         ) : (
                                 <Title>"Add Event"</Title>
                             )}
@@ -184,11 +199,11 @@ export default class AddModal extends Component {
                         <Form>
                             <Item floatingLabel>
                                 <Label>Name</Label>
-                                <Input style={{color: '#4370ba'}} onChangeText={(text) => this.setState({ name: text })} />
+                                <Input style={{color: '#232D4B'}} onChangeText={(text) => this.setState({ name: text })} />
                             </Item>
                             <Item floatingLabel>
                                 <Label>Description</Label>
-                                <Input style={{color: '#4370ba'}} onChangeText={(text) => this.setState({ description: text })} />
+                                <Input style={{color: '#232D4B'}} onChangeText={(text) => this.setState({ description: text })} />
                             </Item>
                         </Form>
                     </View>    
@@ -199,21 +214,44 @@ export default class AddModal extends Component {
                         </TouchableOpacity>
                         <DateTimePicker
                             isVisible={this.state.openStart}
-                            onConfirm={(date) => {this.setState({startDate: date, openStart: false})}}
+                            onConfirm={(date) => {
+                                if(this.state.endDate){
+                                    if (this.state.endDate.getTime() < date.getTime()){
+                                        this.setState({startDate: date, openStart: false, endDate: null})
+                                    }
+                                    else{
+                                        this.setState({startDate: date, openStart: false})
+                                    }
+                                }
+                                else{
+                                    this.setState({startDate: date, openStart: false})
+                                }
+                            }}
                             onCancel={() => this.setState({openStart: false})}
                             mode = {'datetime'}
+                            minimumDate = {new Date()}
+                            maximumDate = {new Date(new Date().getTime()+(2*24*60*60*1000))}
                             date = {this.state.startDate == null ? (new Date()):(this.state.startDate)}
                         />
                         {this.state.startDate == null ? (
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#4370ba', fontSize: 18}}>{this.convert(this.state.startDate)}</Text>
+                                <Text style={{color: '#232D4B', fontSize: 18}}>{this.convert(this.state.startDate)}</Text>
                             </View>
                         )}
                         
                         <Title style={{ color:'black',fontSize:13,marginTop: '10%' }}>End</Title>
-                        <TouchableOpacity onPress={() => this.setState({openEnd: true})} style={{alignItems: 'center'}}>
+                        <TouchableOpacity onPress={() => {
+                            if(this.state.startDate){
+                                this.setState({openEnd: true})
+                                }
+                            else{
+                                alert("Please Choose a Start Time First!")
+                            }
+                            }
+                            } 
+                            style={{alignItems: 'center'}}>
                             <Icon name="clock-o" size={32} color='black' />
                             <Text style={{color: 'orange'}}> Select </Text>
                         </TouchableOpacity>
@@ -222,13 +260,15 @@ export default class AddModal extends Component {
                             onConfirm={(date) => {this.setState({endDate: date, openEnd: false});}}
                             onCancel={() => this.setState({openEnd: false})}
                             mode = {'datetime'}
-                            date = {this.state.endDate == null ? (new Date()):(this.state.endDate)}
+                            minimumDate = {this.state.startDate == null ? (new Date()):(new Date(this.state.startDate.getTime()+(1*60*60*1000)))}
+                            maximumDate = {this.state.startDate == null ? (new Date(new Date().getTime()+(24*60*60*1000))):(new Date(this.state.startDate.getTime()+(24*60*60*1000)))}
+                            date = {this.getEndDate()}
                         />
                         {this.state.endDate == null ? (
                             <Text/>
                         ):(
                             <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#4370ba', fontSize: 18}}>{this.convert(this.state.endDate)}</Text>
+                                <Text style={{color: '#232D4B', fontSize: 18}}>{this.convert(this.state.endDate)}</Text>
                             </View>
                         )}
                         <Dropdown
@@ -238,21 +278,41 @@ export default class AddModal extends Component {
                             pickerStyle = {{width: 380, borderWidth: 1.5}}
                             baseColor='black'
                             lineWidth= {1}
-                            selectedItemColor = '#4370ba'
-                            textColor = '#4370ba'
+                            selectedItemColor = '#232D4B'
+                            textColor = '#232D4B'
                             inputContainerStyle={{marginRight: '5%',marginLeft: '5%',marginTop: '3%'}}
                             />   
-                        <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center'}}>     
-                        <TouchableOpacity 
+                        <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center',marginTop: '8%'}}>     
+                        <Button
                             onPress= {()=>this.confirmInputs()}
-                            style={{borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#4370ba',alignItems: 'center', marginTop: '10%'}}>
-                            <Text style={{color: 'white'}}>Confirm</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
+                            buttonStyle={{
+                                backgroundColor: "#232D4B",
+                                width: 100,
+                                height: 40,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5
+                              }}
+                            title = "Confirm"
+                            fontSize= {14}
+                            fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+                        />
+                        <Button 
                         onPress= {()=>this.props.closeModal()}
-                        style={{marginTop: 10,borderWidth:1,width: 140,borderRadius:20,borderColor: 'black',paddingVertical: 6, backgroundColor:'#f44336', alignItems: 'center'}}>
-                            <Text style={{color: 'white'}}>Cancel</Text>
-                        </TouchableOpacity>
+                        buttonStyle={{
+                            backgroundColor: "transparent",
+                            width: 100,
+                            height: 40,
+                            borderColor: "#232D4B",
+                            borderWidth: 2,
+                            borderRadius: 5,
+                            marginTop: 18
+                          }}
+                        title = "Cancel"
+                        fontSize= {14}
+                        fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+                        textStyle = {{color: '#232D4B'}}
+                        />
                         </View>
                     
                     <ConfirmDialog
