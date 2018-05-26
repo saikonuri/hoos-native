@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, View, AsyncStorage, Text, Picker,TouchableOpacity, ScrollView } from "react-native";
 import axios from "axios";
-import { Header, Avatar, Button, Icon } from "react-native-elements";
+import { Header, Avatar, Button, Icon} from "react-native-elements";
+import {Title} from "native-base"
+import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import { Font } from "expo";
 import PopupDialog from 'react-native-popup-dialog';
 import EventInfo from './EventInfo.js'
@@ -180,66 +182,74 @@ export default class ModalEvent extends Component{
                     />
         }
 
+        let going = this.state.event.going.map(person => {
+            return(
+                <Text key = {person} style={{marginLeft: 10}}>{person}</Text>
+            )
+        }) 
+
         if(!this.props.editable){
             return(
-                <View style={styles.box}>
-                        <View style={styles.title}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
-                            <TouchableOpacity onPress={()=>this.setState({showDescription:!(this.state.showDescription),showGoing:false})}>
-                                <Icon name={"information"} type="material-community" size={17} color={'white'}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.setState({showGoing: !(this.state.showGoing),showDescription: false})}>
-                                <Icon name={"account-multiple"} type="material-community" size={17} color={'white'}/>
-                            </TouchableOpacity>
-                            <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
+                <Card >
+                    <CardTitle
+                    title={event.name}
+                    subtitle ={this.convert(event.startDate)}
+                    />
+                    <CardContent>
+                        <View>
+                            <Text> {event.description}</Text>
                         </View>
-                        <View style={styles.selection}>
-                        {!this.state.going ? (<TouchableOpacity 
-                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
+                        <Title style={{marginTop: 5}}> Going </Title>
+                        <ScrollView horizontal style={{marginTop: 20}}>
+                            {going}
+                        </ScrollView>
+                    </CardContent>
+                    <CardAction 
+                    separator={true} 
+                    inColumn={false}>
+                   {!this.state.going ? (<CardButton
                             onPress= {()=>this.updateStatus()}
-                            >
-                            <Text>Go</Text>
-                        </TouchableOpacity>):(<TouchableOpacity 
-                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
+                            title = "Go"
+                            />   
+                        ):(<CardButton
                             onPress= {()=>this.updateStatus()}
-                            >
-                            <Text>Don't Go</Text>
-                        </TouchableOpacity>)}
-                        {info}
-                        </View>
-                        
-                </View>
+                            title = "Don't Go"
+                            />   )}
+                    </CardAction>
+                </Card>
             );
         }
 
         else{
             if(!this.state.edit){
             return(
-            <View style={styles.box}>
-                        <View style={styles.title}>
-                            <Text style={{ fontWeight: 'bold', fontSize: 17, color:'orange'}}>{event.name}</Text>
-                            <TouchableOpacity onPress={()=>this.setState({showDescription:!(this.state.showDescription),showGoing:false})}>
-                                <Icon name={"information"} type="material-community" size={17} color={'white'}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={()=>this.setState({showGoing: !(this.state.showGoing),showDescription: false})}>
-                                <Icon name={"account-multiple"} type="material-community" size={17} color={'white'}/>
-                            </TouchableOpacity>
-                            <Text style={{color:'white'}}> {this.convert(event.startDate)} - {this.convert(event.endDate)} </Text>
+                <Card >
+                    <CardTitle
+                    title={event.name}
+                    subtitle ={this.convert(event.startDate)}
+                    />
+                    <CardContent>
+                        <View>
+                            <Text> {event.description}</Text>
                         </View>
-                        <View style={styles.selection}>
-                        <TouchableOpacity 
-                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#ADD8E6'}}
+                        <Title style={{marginTop: 5}}> Going </Title>
+                        <ScrollView horizontal style={{marginTop: 20}}>
+                            {going}
+                        </ScrollView>
+                    </CardContent>
+                    <CardAction 
+                    separator={true} 
+                    inColumn={false}>
+                    <CardButton
                             onPress= {()=>this.openEdit()}
-                            >
-                            <Text>Edit</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            style={{borderWidth:1,borderRadius:20,borderColor: 'black',paddingHorizontal: 40,paddingVertical: 6, backgroundColor:'#FFA07A'}}
+                            title = "Edit"
+                            /> 
+                    <CardButton
                             onPress= {()=>this.setState({confirmDelete:true})}
-                            >
-                            <Text>Delete</Text>
-                        </TouchableOpacity>
-                        <ConfirmDialog
+                            title = "Delete"
+                            />   
+                    </CardAction>
+                    <ConfirmDialog
                             title="Delete Event?"
                             message="Are you sure about deleting this event?"
                             visible={this.state.confirmDelete}
@@ -253,9 +263,7 @@ export default class ModalEvent extends Component{
                                 onPress: () => this.setState({confirmDelete: false}) 
                             }}
                         />
-                        {info}
-                        </View>
-                </View>
+                </Card>
             );
         }
         else{
@@ -268,13 +276,7 @@ export default class ModalEvent extends Component{
 };
 
 const styles = {
-    box:{
-        borderWidth: 1,
-        borderRadius: 20,
-        borderColor:'#ADD8E6',
-        marginTop: 7,
-        width: 350
-    },
+    
     title : {
         alignItems: 'center',
         marginTop:3

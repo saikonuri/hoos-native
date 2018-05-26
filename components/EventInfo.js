@@ -27,22 +27,26 @@ export default class EventInfo extends Component{
         super(props);
     }
 
+    componentWillMount(){
+        console.log(this.props.description)
+    }
+
     render(){
         let people = this.props.going.map(p => {
             return(
-                <Text key={p} style={{marginLeft: 15,color:'white'}}>{p}</Text>
+                <Text key={p} style={{marginLeft: 15,color:'black'}}>{p}</Text>
             )
         })
 
         if(this.props.going.length == 0){
-            people = <Text style={{marginLeft: 15,color:'white'}}>No One!</Text>
+            people = <Text style={{marginLeft: 15,color:'black'}}>No One!</Text>
         }
 
         if(this.props.showGoing){
             return(
-                    <View style={{flex: 1, flexDirection: 'column', width: 270, height:80}}>
-                        <Title style={{marginTop: 5,color:'white'}}> Going </Title>
-                        <ScrollView style={{marginTop: 2}}>
+                    <View style={{height: 100,width: '100%'}}>
+                        <Title style={{color:'black'}}> Going </Title>
+                        <ScrollView>
                             {people}
                         </ScrollView>   
                     </View>
@@ -51,10 +55,10 @@ export default class EventInfo extends Component{
 
         else{
             return(
-                <View style={{flex: 1, flexDirection: 'column', width: 270, height: 80}}>
-                    <Title style={{color:'white'}}> Description </Title>
-                    <ScrollView style={{marginLeft: 15, marginTop: 10, height: 30}}>  
-                        <Text style={{color:'white'}}>{this.props.description}</Text>
+                <View style={{height: 100, width: '100%'}}>
+                    <Title style={{color:'black'}}> Description </Title>
+                    <ScrollView >  
+                        <Text style={{color:'black'}}>{this.props.description}</Text>
                     </ScrollView>   
                 </View>
         )

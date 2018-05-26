@@ -1,4 +1,4 @@
-import { TouchableOpacity, TouchableWithoutFeedback, Modal, Animated } from 'react-native'
+import { TouchableOpacity, TouchableWithoutFeedback, Modal, Animated, Dimensions} from 'react-native'
 import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
 import React, { Component } from "react";
 import {
@@ -30,6 +30,8 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 var moment = require('moment');
 
 var url = 'http://192.168.1.180:4000';
+let deviceWidth = Dimensions.get('window').width;
+let deviceHeight = Dimensions.get('window').height;
 
 // The AddModal Component: When we create a new event, this modal pops up
 export default class EditModal extends Component {
@@ -256,12 +258,10 @@ export default class EditModal extends Component {
 const styles = {
     modal: {
         backgroundColor: 'white',
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        right: 0, 
-        bottom: 0,
-        height: '500%'
+        flex: 1,
+        width: deviceWidth,
+        height: deviceHeight/1.5,
+        alignItems: 'center'
     },
     form: {
         width: '90%',

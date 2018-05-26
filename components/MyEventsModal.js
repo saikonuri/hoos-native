@@ -14,11 +14,11 @@ import {
     Item,
     Input
 } from "native-base";
-import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
-import { Header, Avatar, Button, Icon } from "react-native-elements";
+import { StyleSheet, View, AsyncStorage, Text, Picker, ScrollView } from "react-native";
+import { Header, Avatar, Button} from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome';
 import { MapView } from "expo";
 import { Font } from "expo";
-
 import axios from "axios";
 import { locale } from 'moment';
 import { LinearGradient } from 'expo';
@@ -39,7 +39,8 @@ export default class MyEventsModal extends Component {
     async componentWillMount() {
         await Font.loadAsync({
             bungee: require("../assets/fonts/Bungee-Regular.ttf"),
-            arimo: require("../assets/fonts/Arimo-Regular.ttf")
+            arimo: require("../assets/fonts/Arimo-Regular.ttf"),
+            raleway: require("../assets/fonts/Raleway-Black.ttf")
         });
 
         this.setState({
@@ -80,44 +81,41 @@ export default class MyEventsModal extends Component {
 
 
         return ( 
-                <Animated.ScrollView style={[styles.modal,animStyle]}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.closeModal();
-                        }}
-                        style={styles.close}
-                    >
-                        <Icon
-                            name={"close-box"} type="material-community" size={28} color={'white'}
-                        />
-                    </TouchableOpacity>
-                    <View style={styles.form}>
-                        {this.state.fontLoaded ? (
-                            <Title style={{ fontFamily: 'arimo', fontSize: 18, color: 'white' }}>My Events</Title>
+                <Animated.View style={[styles.modal,animStyle]}>
+                    <Header
+                        outerContainerStyles = {{height: '10%'}}
+                        backgroundColor = '#E57200'
+                        leftComponent= {<TouchableOpacity
+                            onPress={() => {
+                                this.props.closeModal();
+                            }}
+                        >
+                            <Icon
+                                name={"arrow-left"} size={20} color={'white'}
+                            />
+                        </TouchableOpacity>}
+                        centerComponent =  {this.state.fontLoaded ? (
+                            <Title style={{ fontFamily: 'raleway', fontSize: 18, color: 'white' }}>My Events</Title>
                         ) : (
                                 <Title>My Events</Title>
                             )}
+                    /> 
+                    <ScrollView>
                         {myEvents}
-                    </View>
-                </Animated.ScrollView>
+                    </ScrollView>
+                </Animated.View>
         );
     }
 }
 
 const styles = {
     modal: {
-        backgroundColor: '#1e3c6d',
+        backgroundColor: '#DCDCDC',
         height: '100%'
-    },
-    close: {
-        marginTop: 40,
-        marginLeft: 4,
-        width: 50
     },
     form: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'space-around',
         alignItems:'center'
     }
 }
