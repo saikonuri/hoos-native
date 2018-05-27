@@ -202,6 +202,7 @@ export default class Home extends Component {
           key={marker.id}
           zIndex =  {0}
           onPress = {(e) => this.map.animateToCoordinate(e.nativeEvent.coordinate)}
+          
         >
           <View style={{
             width: 24,
@@ -217,7 +218,7 @@ export default class Home extends Component {
             <TouchableOpacity onPress={() => this.setState({ locationModal: true, selectedLocation: marker.name })}>
             <Text style={{ fontFamily: this.state.fontLoaded ? ('raleway'):('Helvetica'), color: color[1] }}>{marker.name}</Text>
             <View style={{flex: 1, flexDirection: 'row'}}>
-            <Text>Number of Events: </Text>
+            <Text style={{fontFamily: this.state.fontLoaded ? ('ralewayRegular'):('Helvetica')}}>Number of Events: </Text>
             <Text style={{color: color[1]}}>{this.getCount(marker.name)}</Text>
             </View>
             </TouchableOpacity>
