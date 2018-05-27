@@ -41,7 +41,7 @@ export default class Home extends Component {
       locationModal: false,
       selectedLocation: "",
       myEventsModal: false,
-      region:
+      savedRegion:
         {
           latitude: 38.0329,
           longitude: -78.5135,
@@ -191,11 +191,8 @@ export default class Home extends Component {
     })
   }
 
-  changeRegion(region){
-    this.setState({region:region})
-  }
-
   render() {
+    console.log(this.state.region)
     let markers;
     markers = locations.map(marker => {
       let color = this.getColor(marker.name);
@@ -272,8 +269,7 @@ export default class Home extends Component {
       <TouchableOpacity activeOpacity={1} style={styles.container}>
         <MapView
           style={styles.map}
-          initialRegion={this.state.region}
-          onRegionChangeComplete = {(region) => this.changeRegion(region)}
+          initialRegion={this.state.savedRegion}
         >
           {markers}
         </MapView>
