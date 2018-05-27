@@ -32,7 +32,11 @@ export default class ModalEvent extends Component{
 
     async componentWillMount() {
         await Font.loadAsync({
-            bungee: require("../assets/fonts/Bungee-Regular.ttf")
+            bungee: require("../assets/fonts/Bungee-Regular.ttf"),
+            raleway: require("../assets/fonts/Raleway-Black.ttf"),
+            ralewayExtraLight: require("../assets/fonts/Raleway-ExtraLight.ttf"),
+            ralewayRegular: require("../assets/fonts/Raleway-Regular.ttf"),
+            ralewayMedium: require("../assets/fonts/Raleway-Medium.ttf")
         });
         this.setState({
             fontLoaded: true
@@ -99,13 +103,21 @@ export default class ModalEvent extends Component{
 
     convert(date){
         let obj = new Date(date);
-        let year = obj.getFullYear().toString();
-        let month = (obj.getMonth()+1).toString();
-        let day = (obj.getDate());
-
+        let cur = new Date();
+        let today = false
+        if(obj.setHours(0,0,0,0) == cur.setHours(0,0,0,0)) {
+            today = true
+        }
+        obj = new Date(date);
         let hour = obj.getHours();
         let mins = obj.getMinutes();
-        var ret = month+"/"+ day +"/" + year + " " + this.time(hour,mins);
+
+        if(today){
+            var ret =  "Today " + this.time(hour,mins);
+        }
+        else{
+            var ret =  "Tomorrow " + this.time(hour,mins);
+        }
         return ret
     }
 
@@ -184,36 +196,57 @@ export default class ModalEvent extends Component{
 
         let going = this.state.event.going.map(person => {
             return(
-                <Text key = {person} style={{marginLeft: 10}}>{person}</Text>
+                <Text key = {person} style={{marginLeft: 3, fontFamily: 'raleway'}}>{person}</Text>
             )
         }) 
 
         if(!this.props.editable){
             return(
-                <Card >
-                    <CardTitle
-                    title={event.name}
-                    subtitle ={this.convert(event.startDate)}
-                    />
-                    <CardContent>
+                <Card style={{borderRadius: 12}}>
+                    <View style={{flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: '2%', borderBottomColor: '#232D4B', borderBottomWidth: 2}}>
+                        <Title style={{fontFamily: 'raleway', fontSize: 25, marginLeft: '5%', color: '#232D4B'}}>{event.name}</Title>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayRegular', marginTop: 5, marginRight:'5%'}):({})}>{this.convert(event.startDate)}</Text>
+                    </View>
+                    <CardContent style={{marginTop: 5}}>
                         <View>
-                            <Text> {event.description}</Text>
+                            <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayExtraLight'}):({})}> {event.description}</Text>
                         </View>
-                        <Title style={{marginTop: 5}}> Going </Title>
-                        <ScrollView horizontal style={{marginTop: 20}}>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayMedium', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
+                        <ScrollView horizontal style={{marginTop: 10}}>
                             {going}
                         </ScrollView>
                     </CardContent>
-                    <CardAction 
-                    separator={true} 
-                    inColumn={false}>
-                   {!this.state.going ? (<CardButton
+                    <CardAction  
+                    inColumn={false}
+                    style={{marginBottom: 8}}
+                    >
+                   {!this.state.going ? (<Button
                             onPress= {()=>this.updateStatus()}
                             title = "Go"
+                            buttonStyle={{
+                                backgroundColor: "#4caf50",
+                                width: 70,
+                                height: 30,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5,
+                                marginLeft: '8%'
+                              }}
+                              titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
                             />   
-                        ):(<CardButton
+                        ):(<Button
                             onPress= {()=>this.updateStatus()}
-                            title = "Don't Go"
+                            title = "Can't Go"
+                            buttonStyle={{
+                                backgroundColor: "#fa5a4e",
+                                width: 80,
+                                height: 30,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5,
+                                marginLeft: '8%'
+                              }}
+                              titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
                             />   )}
                     </CardAction>
                 </Card>
@@ -223,30 +256,51 @@ export default class ModalEvent extends Component{
         else{
             if(!this.state.edit){
             return(
-                <Card >
-                    <CardTitle
-                    title={event.name}
-                    subtitle ={this.convert(event.startDate)}
-                    />
-                    <CardContent>
+                <Card style={{borderRadius: 12}}>
+                    <View style={{flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: '2%', borderBottomColor: '#232D4B', borderBottomWidth: 2}}>
+                        <Title style={{fontFamily: 'raleway', fontSize: 25, marginLeft: '5%', color: '#232D4B'}}>{event.name}</Title>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayRegular', marginTop: 5, marginRight:'5%'}):({})}>{this.convert(event.startDate)}</Text>
+                    </View>
+                    <CardContent style={{marginTop: 5}}>
                         <View>
-                            <Text> {event.description}</Text>
+                            <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayExtraLight'}):({})}> {event.description}</Text>
                         </View>
-                        <Title style={{marginTop: 5}}> Going </Title>
-                        <ScrollView horizontal style={{marginTop: 20}}>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayMedium', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
+                        <ScrollView horizontal style={{marginTop: 10}}>
                             {going}
                         </ScrollView>
                     </CardContent>
-                    <CardAction 
-                    separator={true} 
-                    inColumn={false}>
-                    <CardButton
+                    <CardAction  
+                    inColumn={false}
+                    style={{marginBottom: 8}}
+                    >
+                    <Button
                             onPress= {()=>this.openEdit()}
                             title = "Edit"
+                            buttonStyle={{
+                                backgroundColor: "#232D4B",
+                                width: 70,
+                                height: 30,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5,
+                                marginLeft: '9%'
+                              }}
+                              titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
                             /> 
-                    <CardButton
+                    <Button
                             onPress= {()=>this.setState({confirmDelete:true})}
                             title = "Delete"
+                            buttonStyle={{
+                                backgroundColor: "#fa5a4e",
+                                width: 70,
+                                height: 30,
+                                borderColor: "transparent",
+                                borderWidth: 0,
+                                borderRadius: 5,
+                                marginLeft: '2%'
+                              }}
+                              titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
                             />   
                     </CardAction>
                     <ConfirmDialog

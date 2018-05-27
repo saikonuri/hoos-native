@@ -232,7 +232,7 @@ export default class EditModal extends Component {
                         title = "Cancel"
                         fontSize= {14}
                         fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
-                        textStyle = {{color: '#232D4B'}}
+                        titleStyle = {{color: '#232D4B'}}
                         />
                         </View>
                     </View>

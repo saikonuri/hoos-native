@@ -102,7 +102,7 @@ export default class LocationModal extends Component {
 
 const styles = {
     modal: {
-        backgroundColor: 'white',
+        backgroundColor: '#DCDCDC',
         height: '100%'
     },
     form: {

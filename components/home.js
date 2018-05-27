@@ -73,7 +73,10 @@ export default class Home extends Component {
       bungee: require("../assets/fonts/Bungee-Regular.ttf"),
       acme : require("../assets/fonts/Acme-Regular.ttf"),
       arimo: require("../assets/fonts/Arimo-Bold.ttf"),
-      raleway: require("../assets/fonts/Raleway-Black.ttf")
+      raleway: require("../assets/fonts/Raleway-Black.ttf"),
+      ralewayExtraLight: require("../assets/fonts/Raleway-ExtraLight.ttf"),
+      ralewayRegular: require("../assets/fonts/Raleway-Regular.ttf"),
+      ralewayMedium: require("../assets/fonts/Raleway-Medium.ttf")
     });
     this.setState({
       fontLoaded: true
@@ -82,7 +85,6 @@ export default class Home extends Component {
 
   componentDidMount() {
     this.fetchEvents();
-
     server.on('newEvent',(event)=>{
       var arr = this.state.events;
       arr.push(event);
@@ -292,15 +294,13 @@ export default class Home extends Component {
               buttonStyle={{
                 backgroundColor: "transparent",
                 width: 80,
-                height: 20,
+                height: 25,
                 borderColor: "#232D4B",
                 borderWidth: 2,
                 borderRadius: 5,
                 right: -2
               }}
-              fontSize= {12}
-              fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
-              textStyle={{color: '#232D4B'}}
+              titleStyle={{color: '#232D4B', fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
             />
           }
         />
@@ -318,8 +318,7 @@ export default class Home extends Component {
               borderRadius: 5,
               right: -2
             }}
-            fontSize= {14}
-            fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+            titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 14}}
           />
           
           <Button
@@ -334,8 +333,7 @@ export default class Home extends Component {
             borderRadius: 5,
             right: -2
           }}
-          fontSize= {14}
-          fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+          titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 14}}
           />
         </View>
       </TouchableOpacity >
@@ -364,8 +362,7 @@ const styles = StyleSheet.create({
   name: {
     fontFamily: "raleway",
     fontSize: 22,
-    color: '#E57200',
-    marginTop: "10%"
+    color: '#E57200'
   },
   nav: {
     left: 0,

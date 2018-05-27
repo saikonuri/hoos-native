@@ -69,8 +69,7 @@ export default class Login extends Component {
             marginTop: '60%'
           }}
           title="Log In"
-          fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
-          textStyle = {{color: '#232D4B'}}
+          titleStyle = {{color: '#232D4B',fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica') }}
           onPress={() => this.googleLogIn()}
         />
       </View>

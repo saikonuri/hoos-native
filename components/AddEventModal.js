@@ -11,16 +11,14 @@ import {
     Body,
     Form,
     Item,
-    Input,
     Label
 } from "native-base";
 import { StyleSheet, View, AsyncStorage, Text, Picker } from "react-native";
-import { Header, Avatar, Button } from "react-native-elements";
+import { Header, Avatar, Button, Input, Icon } from "react-native-elements";
 import { MapView } from "expo";
 import { Font } from "expo";
 import locations from '../assets/areas.json'
 import axios from "axios";
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { locale } from 'moment';
 import { Dropdown } from 'react-native-material-dropdown';
 import { ConfirmDialog } from 'react-native-simple-dialogs';
@@ -131,13 +129,21 @@ export default class AddModal extends Component {
 
     convert(date){
         let obj = new Date(date);
-        let year = obj.getFullYear().toString();
-        let month = (obj.getMonth()+1).toString();
-        let day = (obj.getDate());
-
+        let cur = new Date();
+        let today = false
+        if(obj.setHours(0,0,0,0) == cur.setHours(0,0,0,0)) {
+            today = true
+        }
+        obj = new Date(date);
         let hour = obj.getHours();
         let mins = obj.getMinutes();
-        var ret = month+"/"+ day +"/" + year + " " + this.time(hour,mins);
+
+        if(today){
+            var ret =  "Today " + this.time(hour,mins);
+        }
+        else{
+            var ret =  "Tomorrow " + this.time(hour,mins);
+        }
         return ret
     }
 
@@ -162,7 +168,7 @@ export default class AddModal extends Component {
                             }}
                            
                         >
-                            <Icon name="arrow-left" size={20} color={'white'}/>
+                            <Icon name="close" size={30} color={'white'}/>
                         </TouchableOpacity>}
                         centerComponent = {this.state.fontLoaded ? (
                             <Title style={{ fontFamily: 'raleway',fontSize:20, color: 'white'}}>Add Event</Title>
@@ -171,22 +177,43 @@ export default class AddModal extends Component {
                             )}
                     /> 
                     <View style={styles.form}>
-                        <Form>
-                            <Item floatingLabel>
-                                <Label>Name</Label>
-                                <Input style={{color: '#232D4B'}} onChangeText={(text) => this.setState({ name: text })} />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label>Description</Label>
-                                <Input style={{color: '#232D4B'}} onChangeText={(text) => this.setState({ description: text })} />
-                            </Item>
-                        </Form>
+                                <Title style={{fontFamily: 'raleway', color: '#232D4B'}}>{'Name'}</Title>
+                                <Input 
+                                containerStyle={styles.input}
+                                inputContainerStyle={{marginRight: '2%', marginLeft: '2%', borderColor: 'white'}} 
+                                onChangeText={(text) => this.setState({ name: text })}
+                                leftIcon = {<Icon
+                                    name='ios-american-football'
+                                    type='ionicon'
+                                    color='#517fa4'
+                                  />}
+                                  inputStyle={{fontFamily: 'ralewayRegular', color: '#E57200'}}
+                                />
+                                 <Title style={{fontFamily: 'raleway', color: '#232D4B', marginTop: '10%'}}>{'Description'}</Title>
+                                <Input 
+                                containerStyle={styles.input} 
+                                inputContainerStyle={{marginRight: '2%', marginLeft: '2%',borderColor: 'white'}} 
+                                onChangeText={(text) => this.setState({ description: text })}
+                                leftIcon = {<Icon
+                                    name='description'
+                                    color='#517fa4'
+                                  />}
+                                  inputStyle={{fontFamily: 'ralewayRegular', color: '#E57200'}}
+                                />
+                                
                     </View>    
-                        <Title style={{color:'black',fontSize:13, alignContent: 'center', marginTop: '10%'}}>Start</Title>
-                        <TouchableOpacity onPress={() => this.setState({openStart: true})} style={{alignItems: 'center',alignContent: 'center'}}>
-                            <Icon name="clock-o" size={32} color='black'/>
-                            <Text style={{color: 'orange'}}> Select </Text>
+                        <Title style={{color:'black',fontFamily: 'raleway', color: '#232D4B', marginTop: '10%'}}>Start Time</Title>
+                        <View style={{flexDirection: 'row', width: '100%'}}>
+                        <TouchableOpacity onPress={() => this.setState({openStart: true})} style={{width: '15%', marginLeft: '10%'}}>
+                            <Icon name="calendar-clock" type="material-community" size={32} color='#517fa4'/>
+                            <Text style={{color: 'orange', fontFamily: 'ralewayMedium'}}> Select </Text>
                         </TouchableOpacity>
+                        {this.state.startDate == null ? (
+                            <Text/>
+                        ):(
+                                <Text style={{marginLeft: '30%', marginTop: '5%', fontFamily: 'ralewayRegular',fontSize: 17, color: '#E57200'}}>{this.convert(this.state.startDate)}</Text> 
+                        )}
+                        </View>
                         <DateTimePicker
                             isVisible={this.state.openStart}
                             onConfirm={(date) => {
@@ -198,24 +225,18 @@ export default class AddModal extends Component {
                             maximumDate = {new Date(new Date().getTime()+(24*60*60*1000))}
                             date = {this.state.startDate == null ? (new Date()):(this.state.startDate)}
                         />
-                        {this.state.startDate == null ? (
-                            <Text/>
-                        ):(
-                            <View style={{alignItems: 'center'}}>
-                                <Text style={{color: '#232D4B', fontSize: 18}}>{this.convert(this.state.startDate)}</Text>
-                            </View>
-                        )}
-                        
+                        <Title style={{color:'black',fontFamily: 'raleway', color: '#232D4B', marginTop: '10%'}}>Location</Title>
                         <Dropdown
-                            label="Select a location"
                             onChangeText={(itemValue, itemIndex) => this.setState({ selectedLocation: itemValue })}
                             data = {pickerItems}
                             pickerStyle = {{width: 380, borderWidth: 1.5}}
+                            itemTextStyle = {{fontFamily: 'ralewayMedium', fontSize: 17}}
                             baseColor='black'
                             lineWidth= {1}
-                            selectedItemColor = '#232D4B'
-                            textColor = '#232D4B'
-                            inputContainerStyle={{marginRight: '5%',marginLeft: '5%',marginTop: '3%'}}
+                            selectedItemColor = '#E57200'
+                            style={{fontFamily: 'ralewayRegular'}}
+                            textColor = '#E57200'
+                            inputContainerStyle={{marginRight: '5%',marginLeft: '5%'}}
                             />   
                         <View style={{display: 'flex',flexDirection: 'column',alignItems: 'center',marginTop: '8%'}}>     
                         <Button
@@ -229,8 +250,7 @@ export default class AddModal extends Component {
                                 borderRadius: 5
                               }}
                             title = "Confirm"
-                            fontSize= {14}
-                            fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
+                            titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 14.5}}
                         />
                         <Button 
                         onPress= {()=>this.props.closeModal()}
@@ -244,9 +264,7 @@ export default class AddModal extends Component {
                             marginTop: 18
                           }}
                         title = "Cancel"
-                        fontSize= {14}
-                        fontFamily = {this.state.fontLoaded ? ('raleway') : ('Helvetica')}
-                        textStyle = {{color: '#232D4B'}}
+                        titleStyle = {{color: '#232D4B',fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 14.5}}
                         />
                         </View>
                     
@@ -275,8 +293,9 @@ const styles = {
         height: '100%'
     },
     form: {
-        width: '90%',
+        width: '100%',
         marginTop: '5%',
+        alignItems: 'center'
     },
     button:{
         borderWidth:1,
@@ -287,5 +306,13 @@ const styles = {
         backgroundColor:'#90EE90',
         width: 70,
         alignItems: 'center'
+    },
+    input: {
+        borderWidth: 2,
+        borderColor: '#232D4B',
+        marginLeft: '10%',
+        marginRight: '10%',
+        borderRadius: 8,
+        marginTop: '2%'
     }
 }

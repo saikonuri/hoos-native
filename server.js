@@ -146,7 +146,7 @@ app.post("/api/events", function (req, res) {
 
 //Edit an existing Event
 app.put("/api/events/:id", function (req, res) {
-    Event.findByIdAndUpdate(req.params.id, req.body.event, (err,event)=>{
+    Event.findByIdAndUpdate(req.params.id, req.body, (err,event)=>{
         if (err) {
             throw err;
         }
