@@ -185,20 +185,14 @@ export default class ModalEvent extends Component{
 
     render(){
         let event = this.state.event;
-        let info;
-        if (this.state.showDescription || this.state.showGoing){
-           info =  <EventInfo 
-                    going = {this.state.event.going} description = {this.state.event.description}
-                    showGoing = {this.state.showGoing}
-                    showDescription = {this.state.showDescription}
-                    />
-        }
 
         let going = this.state.event.going.map(person => {
             return(
                 <Text key = {person} style={{marginLeft: 3, fontFamily: 'raleway'}}>{person}</Text>
             )
         }) 
+
+        let edit =  <EditModal event = {this.state.event} editEvent = {(body) => this.editEvent(body)} closeModal = {() => this.closeEditModal()}/>
 
         if(!this.props.editable){
             return(
@@ -254,7 +248,6 @@ export default class ModalEvent extends Component{
         }
 
         else{
-            if(!this.state.edit){
             return(
                 <Card style={{borderRadius: 12}}>
                     <View style={{flex: 1, flexDirection: 'row', width: '100%', justifyContent: 'space-between', marginTop: '2%', borderBottomColor: '#232D4B', borderBottomWidth: 2}}>
@@ -303,6 +296,7 @@ export default class ModalEvent extends Component{
                               titleStyle={{fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
                             />   
                     </CardAction>
+                    {this.state.edit ? (edit): (<View/>)}
                     <ConfirmDialog
                             title="Delete Event?"
                             message="Are you sure about deleting this event?"
@@ -319,12 +313,6 @@ export default class ModalEvent extends Component{
                         />
                 </Card>
             );
-        }
-        else{
-            return (
-                <EditModal event = {this.state.event} editEvent = {(body) => this.editEvent(body)} closeModal = {() => this.closeEditModal()}/>
-            )
-        }
         }
     }
 };

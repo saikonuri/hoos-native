@@ -23,7 +23,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-      user: null
+      user: null,
+      isLoaded: false
     };
   }
   
@@ -38,7 +39,8 @@ export default class App extends React.Component {
       if (res !== null && res !== "{}") {
         this.setState({
           loggedIn: true,
-          user: JSON.parse(res)
+          user: JSON.parse(res),
+          isLoaded: true
         }, function () {
           this.checkUser();
         })
@@ -123,18 +125,25 @@ export default class App extends React.Component {
 
   // Rendering = Mounting -> Everytime state changes, render is called. "return" has the actual HTML we return to the screen
   render() {
-    if (this.state.loggedIn) {
-      return <Home user={this.state.user} logOut={() => this.logOut()} />;
-    } else {
+    if(this.state.isLoaded){
+      if (this.state.loggedIn) {
+        return <Home user={this.state.user} logOut={() => this.logOut()} />;
+      } else {
+        return (
+          <Login
+            googleLogIn={() => {
+              this.signInWithGoogleAsync();
+            }}
+            facebookLogIn={() => {
+              this.logIn();
+            }}
+          />
+        );
+      }
+    }
+    else {
       return (
-        <Login
-          googleLogIn={() => {
-            this.signInWithGoogleAsync();
-          }}
-          facebookLogIn={() => {
-            this.logIn();
-          }}
-        />
+        <View><Text> Loading... </Text></View>
       );
     }
   }

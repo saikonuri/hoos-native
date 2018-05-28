@@ -199,8 +199,7 @@ export default class AddModal extends Component {
                                     color='#517fa4'
                                   />}
                                   inputStyle={{fontFamily: 'ralewayRegular', color: '#E57200'}}
-                                />
-                                
+                                />     
                     </View>    
                         <Title style={{color:'black',fontFamily: 'raleway', color: '#232D4B', marginTop: '10%'}}>Start Time</Title>
                         <View style={{flexDirection: 'row', width: '100%'}}>
