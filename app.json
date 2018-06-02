@@ -1,12 +1,13 @@
 {
   "expo": {
-    "sdkVersion": "23.0.0",
+    "sdkVersion": "27.0.0",
     "facebookScheme": "fb123456",
     "facebookAppId": "132357100763432",
     "facebookDisplayName": "HoosActive",
     "icon": "./assets/icon.png",
     "splash": {
-      "image": "./assets/Design.png"
+      "image": "./assets/Design.png",
+      "resizeMode": "cover"
     },
     "name": "Hoos Active",
     "privacy": "public"

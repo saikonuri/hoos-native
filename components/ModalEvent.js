@@ -149,7 +149,7 @@ export default class ModalEvent extends Component{
          axios({
             method: 'put',
             url: url + '/api/events/'+event._id,
-            data: body
+            data: body.event
         })
             .then((res) => {
             })

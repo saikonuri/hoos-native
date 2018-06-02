@@ -293,11 +293,10 @@ export default class Home extends Component {
               buttonStyle={{
                 backgroundColor: "transparent",
                 width: 80,
-                height: 25,
+                height: 30,
                 borderColor: "#232D4B",
                 borderWidth: 2,
-                borderRadius: 5,
-                right: -2
+                borderRadius: 5
               }}
               titleStyle={{color: '#232D4B', fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica'), fontSize: 12}}
             />

@@ -61,17 +61,16 @@ export default class Login extends Component {
                 <Text style={{fontSize: 41,color: '#E57200'}}>Hoos Active</Text>
               )}
         <Button
-          small
+          title="Log In"
           buttonStyle={{
-            backgroundColor: "white",
+            backgroundColor: "transparent",
             width: 100,
             height: 40,
             borderColor: "#232D4B",
             borderWidth: 2,
             borderRadius: 5,
-            marginTop: '60%'
+            marginTop: 30
           }}
-          title="Log In"
           titleStyle = {{color: '#232D4B',fontFamily: this.state.fontLoaded ? ('raleway') : null}}
           onPress={() => this.googleLogIn()}
         />
