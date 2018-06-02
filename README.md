@@ -20,6 +20,7 @@ Note: Not available on App Store (due to financial reasons)
 ## Demo
 Due to recent changes to Apple Review Guidelines, Expo no longer supports sharing projects on the iOS client. Therefore, the only way to view this app is to fork this project and run your own local development server. Then follow the [Expo docs and guidelines](https://docs.expo.io/versions/v27.0.0/introduction/) to start your own local server. I apologize for this convenience.
 
-![Login Gif](https://github.com/saikonuri/hoos-native/blob/master/assets/gifs/add.GIF)
+<img src="https://github.com/saikonuri/hoos-native/blob/master/assets/gifs/login.GIF" style="width: 200px;"/>
+![Login Gif](https://github.com/saikonuri/hoos-native/blob/master/assets/gifs/login.GIF)
 
 
