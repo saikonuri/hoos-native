@@ -47,7 +47,7 @@ var db = mongoose.connection;
 // Where our server is running
 var server = require('http').Server(app);
 server.listen(port);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server,{pingTimeout: 30000});
 io.on('connection',(client) => {
     console.log("Connected to Clients");
     client.on('newEvent',(event) => {

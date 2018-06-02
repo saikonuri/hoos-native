@@ -12,7 +12,7 @@ var moment = require('moment');
 import { ConfirmDialog } from 'react-native-simple-dialogs';
 import server from './socket.js'
 
-var url = 'http://192.168.1.180:4000'
+var url = 'https://mighty-castle-27764.herokuapp.com'
 
 
 export default class ModalEvent extends Component{

@@ -12,7 +12,7 @@ import areas from './assets/areas.json';
 // App.js (or any component) ---> makes request to server/api ---> server.js/api.js ---> Query Database ---> MongoDB
 // Note: Change this url everytime to your own IP address since mine not be running when you are coding
 // Eventually the URL will change when we deploy our express server to a cloud provider, then everyone can have same URL
-var url = 'http://192.168.1.180:4000'
+var url = 'https://mighty-castle-27764.herokuapp.com'
 
 // Firebase offers Google Auth Service
 var provider = new firebase.auth.GoogleAuthProvider();

@@ -24,7 +24,7 @@ import fb from '../firebase.js'
 import * as firebase from "firebase";
 import server from './socket.js';
 
-var url = 'http://192.168.1.180:4000'
+var url = 'https://mighty-castle-27764.herokuapp.com'
 // The three trends that we use to show how popular a location is on the map
 const icons = ["trending-down", "trending-neutral", "trending-up"];
 

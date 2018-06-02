@@ -25,7 +25,7 @@ import { ConfirmDialog } from 'react-native-simple-dialogs';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 var moment = require('moment');
 
-var url = 'http://192.168.1.180:4000';
+var url = 'https://mighty-castle-27764.herokuapp.com';
 
 // The AddModal Component: When we create a new event, this modal pops up
 export default class AddModal extends Component {
@@ -92,7 +92,7 @@ export default class AddModal extends Component {
             creator: this.props.user.email,
             going: [this.props.user.displayName]
         }
-        
+
         axios({
             method: 'post',
             url: url + '/api/events',
