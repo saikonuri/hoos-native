@@ -1,0 +1,5 @@
+Testing Functionalities:
+
+1. Adding Event does appear on everyone else's map  (Done)
+2. Editing Event updates the event information
+3. Editing Event notifies everyone who is going to that event

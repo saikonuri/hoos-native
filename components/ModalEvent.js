@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, AsyncStorage, Text, Picker,TouchableOpacity, ScrollView } from "react-native";
 import axios from "axios";
-import { Header, Avatar, Button, Icon} from "react-native-elements";
+import { Header, Avatar, Button, Icon, colors} from "react-native-elements";
 import {Title} from "native-base"
 import { Card, CardTitle, CardContent, CardAction, CardButton, CardImage } from 'react-native-cards';
 import { Font } from "expo";
@@ -13,7 +13,7 @@ import { ConfirmDialog } from 'react-native-simple-dialogs';
 import server from './socket.js'
 
 var url = 'https://mighty-castle-27764.herokuapp.com'
-
+const peopleColors = ["#ff9900","#109618","#990099","#0099c6","#dd4477","#aa aa11","#22aa99","#994499","#3366cc","#dc3912"]
 
 export default class ModalEvent extends Component{
     constructor(props){
@@ -26,7 +26,8 @@ export default class ModalEvent extends Component{
             showDescription: false,
             showGoing: false,
             edit: false,
-            confirmDelete: false
+            confirmDelete: false,
+            deleted: false
         }
     }
 
@@ -58,6 +59,14 @@ export default class ModalEvent extends Component{
             if(event._id == this.state.event._id){
                 this.setState({
                     event: event
+                })
+            }
+        })
+
+        server.on('deleteEventInModal', (event) => {
+            if(event._id == this.state.event._id){
+                this.setState({
+                    deleted: true
                 })
             }
         })
@@ -185,15 +194,24 @@ export default class ModalEvent extends Component{
 
     render(){
         let event = this.state.event;
-
+        let index = 1
+        let len = peopleColors.length
         let going = this.state.event.going.map(person => {
+            var color = peopleColors[index]
+            if(index >= len){
+                index = 0
+            }
+            else{
+                index += 1;
+            }
             return(
-                <Text key = {person} style={{marginLeft: 3, fontFamily: 'raleway'}}>{person}</Text>
+                <Text key = {person} style={{marginLeft: 8, fontFamily: 'ralewayRegular', color: color}}>{person}</Text>
             )
         }) 
 
         let edit =  <EditModal event = {this.state.event} editEvent = {(body) => this.editEvent(body)} closeModal = {() => this.closeEditModal()}/>
 
+        if(!this.state.deleted){
         if(!this.props.editable){
             return(
                 <Card style={{borderRadius: 12}}>
@@ -205,7 +223,7 @@ export default class ModalEvent extends Component{
                         <View>
                             <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayExtraLight'}):({})}> {event.description}</Text>
                         </View>
-                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayMedium', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'raleway', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
                         <ScrollView horizontal style={{marginTop: 10}}>
                             {going}
                         </ScrollView>
@@ -258,7 +276,7 @@ export default class ModalEvent extends Component{
                         <View>
                             <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayExtraLight'}):({})}> {event.description}</Text>
                         </View>
-                        <Text style={this.state.fontLoaded ? ({fontFamily: 'ralewayMedium', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
+                        <Text style={this.state.fontLoaded ? ({fontFamily: 'raleway', marginTop: 8, fontSize: 16,color: '#E57200'}):({})}> Going </Text>
                         <ScrollView horizontal style={{marginTop: 10}}>
                             {going}
                         </ScrollView>
@@ -313,6 +331,10 @@ export default class ModalEvent extends Component{
                         />
                 </Card>
             );
+        }
+    }
+        else {
+            return(<View/>);
         }
     }
 };

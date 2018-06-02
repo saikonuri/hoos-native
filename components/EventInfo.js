@@ -20,7 +20,7 @@ import {
 var moment = require('moment');
 import server from './socket.js'
 
-const url = "http://192.168.1.180:4000";
+const url = 'https://mighty-castle-27764.herokuapp.com';
 
 export default class EventInfo extends Component{
     constructor(props){

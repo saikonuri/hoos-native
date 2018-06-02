@@ -24,7 +24,7 @@ import { locale } from 'moment';
 import { LinearGradient } from 'expo';
 import ModalEvent from './ModalEvent.js'
 
-const url = "http://192.168.1.180:4000"
+const url = 'https://mighty-castle-27764.herokuapp.com'
 
 export default class MyEventsModal extends Component {
     constructor(props) {

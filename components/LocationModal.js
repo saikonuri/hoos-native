@@ -24,8 +24,9 @@ import axios from "axios";
 import { locale } from 'moment';
 import ModalEvent from './ModalEvent.js'
 import { LinearGradient } from 'expo';
+import server from './socket.js';
 
-const url = "http://192.168.1.180:4000"
+const url = 'https://mighty-castle-27764.herokuapp.com'
 
 export default class LocationModal extends Component {
     constructor(props) {

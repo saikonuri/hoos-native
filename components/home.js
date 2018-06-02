@@ -100,7 +100,17 @@ export default class Home extends Component {
       if(event.going.includes(this.props.user.displayName)){
         alert(event.name + ' ' + 'has been edited!');
       }
-      this.fetchEvents();
+      let events = this.state.events
+      let newEvents = []
+      events.map(e => {
+        if (e._id == event._id){
+          e = event
+        }
+        newEvents.push(e)
+      })
+      this.setState({
+        events: newEvents
+      })
     })
 
     server.on('deleteEvent', (event) => {
