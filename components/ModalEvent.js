@@ -57,6 +57,9 @@ export default class ModalEvent extends Component{
 
         server.on('editEventInModal',(event) => {
             if(event._id == this.state.event._id){
+                if(event.location !== this.state.event.location){
+                    alert("Location for "  + event.name + " has been changed to "+ event.location)
+                }
                 this.setState({
                     event: event
                 })
