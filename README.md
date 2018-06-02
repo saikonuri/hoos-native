@@ -1,6 +1,9 @@
 # Hoos Active
 Mobile Application (only iOS at the moment) for UVA students looking to schedule pickup activities/games! 
+
 Note: Not available on App Store (due to financial reasons)
+
+[Published Expo Version](https://expo.io/@saik19036/hoos-active) (Recent changes to Expo doesn't allow other users to demo this app on their iPhones, so this link might not work.)
 ## Stack
 * React Native ([Expo](https://docs.expo.io/versions/v27.0.0/introduction/) Fork)
 * Node.js
