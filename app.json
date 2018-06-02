@@ -3,6 +3,12 @@
     "sdkVersion": "23.0.0",
     "facebookScheme": "fb123456",
     "facebookAppId": "132357100763432",
-    "facebookDisplayName": "HoosActive"
+    "facebookDisplayName": "HoosActive",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/Design.png"
+    },
+    "name": "Hoos Active",
+    "privacy": "public"
   }
 }

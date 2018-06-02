@@ -45,6 +45,9 @@ export default class App extends React.Component {
           this.checkUser();
         })
       }
+      else{
+        this.setState({isLoaded: true})
+      }
     });
   }
 

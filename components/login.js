@@ -35,7 +35,10 @@ export default class Login extends Component {
       bungee: require("../assets/fonts/Bungee-Regular.ttf"),
       acme : require("../assets/fonts/Acme-Regular.ttf"),
       arimo: require("../assets/fonts/Arimo-Bold.ttf"),
-      raleway: require("../assets/fonts/Raleway-Black.ttf")
+      raleway: require("../assets/fonts/Raleway-Black.ttf"),
+      ralewayExtraLight: require("../assets/fonts/Raleway-ExtraLight.ttf"),
+      ralewayRegular: require("../assets/fonts/Raleway-Regular.ttf"),
+      ralewayMedium: require("../assets/fonts/Raleway-Medium.ttf")
     });
     this.setState({
       fontLoaded: true
@@ -55,7 +58,7 @@ export default class Login extends Component {
       {this.state.fontLoaded ? (
               <Text style={{fontFamily: "raleway",fontSize: 41,color: '#E57200'}}>Hoos Active</Text>
             ) : (
-                <Text style={{fontSize: 41,color: '#E57200'}}>"Hoos Active"</Text>
+                <Text style={{fontSize: 41,color: '#E57200'}}>Hoos Active</Text>
               )}
         <Button
           small
@@ -69,7 +72,7 @@ export default class Login extends Component {
             marginTop: '60%'
           }}
           title="Log In"
-          titleStyle = {{color: '#232D4B',fontFamily: this.state.fontLoaded ? ('raleway') : ('Helvetica') }}
+          titleStyle = {{color: '#232D4B',fontFamily: this.state.fontLoaded ? ('raleway') : null}}
           onPress={() => this.googleLogIn()}
         />
       </View>

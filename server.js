@@ -46,7 +46,7 @@ var db = mongoose.connection;
 
 // Where our server is running
 var server = require('http').Server(app);
-server.listen(4000);
+server.listen(port);
 var io = require('socket.io').listen(server);
 io.on('connection',(client) => {
     console.log("Connected to Clients");
@@ -127,6 +127,7 @@ app.get("/api/events/name/:name", function(req,res,next){
 
 // Post a new Event
 app.post("/api/events", function (req, res) {
+    console.log("Post Request",req.body)
     var event = new Event({
         name: req.body.name,
         location: req.body.location,
