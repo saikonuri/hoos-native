@@ -45,4 +45,4 @@ Due to recent changes to Apple Review Guidelines, Expo no longer supports sharin
 <img src="https://github.com/saikonuri/hoos-native/blob/master/assets/gifs/delete.GIF" height= "400"/>
 
 ## Sample Interaction
-[![IMAGE ALT TEXT](http://img.youtube.com/vi/Oy_cXYoBB28&feature=youtu.be/0.jpg)](http://www.youtube.com/watch?v=Oy_cXYoBB28&feature=youtu.be "Sample Interaction")
+[![IMAGE ALT TEXT](http://img.youtube.com/vi/Oy_cXYoBB28/0.jpg)](http://www.youtube.com/watch?v=Oy_cXYoBB28&feature=youtu.be "Sample Interaction")
