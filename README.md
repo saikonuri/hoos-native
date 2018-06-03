@@ -43,3 +43,6 @@ Due to recent changes to Apple Review Guidelines, Expo no longer supports sharin
 **Deleting an existing event**
 
 <img src="https://github.com/saikonuri/hoos-native/blob/master/assets/gifs/delete.GIF" height= "400"/>
+
+## Sample Interaction
+[![Everything Is AWESOME](https://img.youtube.com/vi/StTqXEQ2l-Y/0.jpg)](https://www.youtube.com/watch?v=StTqXEQ2l-Y "Everything Is AWESOME")
